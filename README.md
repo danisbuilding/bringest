@@ -1,26 +1,31 @@
-# Vibringdos
+# Bringest
 
-A Friendsgiving potluck sign-up app. A host writes down the dishes they need,
-shares one link, and guests claim a dish, say what they're bringing, and leave a
-note. No accounts, no sign-in, no app to install.
+Sign-up lists for potlucks and collective meals. A host writes down what's
+needed, shares one link, and guests claim a dish, say what they're bringing, and
+leave a note.
 
-Standalone fork of [vibring](https://github.com/danisbuilding/vibring). The two
-are independent — a change here does not reach vibring, and vice versa.
+**No accounts, no sign-in, no email address, no app to install.** A host is
+identified by holding a secret link, and a guest by nothing at all.
 
-Live at **vibringdos.danisbuilding.cc**
+Live at **bringest.app**
 
-## What's different from vibring
+The history before the rename belongs to two earlier private builds this grew
+out of; Bringest is the one that is maintained.
 
-| | vibring | vibringdos |
-|---|---|---|
-| Vocabulary | volunteer, item | **chef, dish** |
-| Count | "3 needed" | "3 needed" / "3 **more** needed" |
-| Sign-up fields | name, qty, note | name, **dish, hot/cold, serves**, note, **private note to host** |
-| List shows | name + note | name + **dish** + "Hot · Serves 8 · note" |
-| Host gets | — | **a collated "Notes for you" block** with copy-all |
-| Colour | fixed forest green | **nine themes**, picked per event |
-| Top of the page | title block | optional **header photo** above it |
-| Host link | copy + email | **share sheet** and **calendar file** too |
+## What it does
+
+| | |
+|---|---|
+| Host | Writes the list: items, how many of each, an optional note per item |
+| Guest | Claims an item, names the dish, says hot or cold and how many it serves |
+| Notes | One for everyone on the list, one only the host can read |
+| Counts | "3 needed" before anyone signs up, "3 more needed" once someone has |
+| Colour | Nine themes, picked per event |
+| Top of the page | Optional header photo, cropped in the browser to 1200x600 |
+| Host link | Copy, share sheet, email draft, or a calendar file |
+| Retention | An event is deleted after three years with no activity |
+
+No AI, no payments, no tracking cookies, and the only third party is Cloudflare.
 
 ## Layout
 
@@ -156,13 +161,18 @@ refused instead of being quietly trimmed into something valid.
 
 | | |
 |---|---|
-| Pages project | `vibringdos` |
-| Repo | `danisbuilding/vibringdos`, branch `main` |
+| Pages project | `bringest` |
+| Repo | `danisbuilding/bringest`, branch `main` |
 | Build output directory | `public` |
 | Build command | none |
-| D1 database | `vibringdos`, bound as `DB` |
-| R2 bucket | `vibringdos-images`, bound as `IMG` |
-| Domains | `vibringdos.danisbuilding.cc`, `vibringdos.pages.dev` |
+| D1 database | `bringest`, bound as `DB` |
+| R2 bucket | `bringest-images`, bound as `IMG` |
+| Domains | `bringest.app`, `bringest.pages.dev` |
+| Analytics | Cloudflare Web Analytics, enabled on the Pages project |
+
+The CSP already allows the analytics beacon, and `Referrer-Policy` is
+`same-origin` rather than `no-referrer` because the beacon is rejected without a
+Referer. Change either back and the dashboard silently reads zero.
 
 Health check: `/api/health` returns `db_bound` and `db_query`. Both must be
 `true`. A binding added after a deployment does not reach it — redeploy, or push
