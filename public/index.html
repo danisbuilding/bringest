@@ -76,7 +76,16 @@ body{
   font-variation-settings:'CASL' 0.45,'MONO' 0;
   font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;
 }
-.wrap{max-width:34rem;margin:0 auto;padding:1.5rem 1.15rem 4rem}
+/* A flex column so the footer can take the slack with an auto top margin:
+   pinned to the bottom of the viewport when the content is short, and pushed
+   below the fold normally when it isn't. 100dvh rather than 100vh so the
+   mobile address bar collapsing doesn't leave the footer floating mid-screen.
+   Children are shrink-proofed because a flex column will otherwise squeeze a
+   tall child to fit instead of letting the page scroll. */
+.wrap{max-width:34rem;margin:0 auto;padding:1.5rem 1.15rem 1.6rem;
+  min-height:100dvh;display:flex;flex-direction:column}
+.wrap>*{flex:none}
+.pagefoot{margin-top:auto;padding-top:2.5rem}
 body.plain{background:#fff}
 
 /* ---- header photo ----
@@ -323,7 +332,8 @@ label .sub{font-weight:400}
   width:1.65rem;height:1.65rem;border-radius:50%;background:var(--ink);color:#fff;
   display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:800;
   font-variation-settings:'CASL' 0,'MONO' 1}
-.mark{display:block;text-align:center;margin-top:2rem;font-size:.75rem;font-weight:600;
+/* The gap above the footer is .pagefoot's padding now, not this margin. */
+.mark{display:block;text-align:center;margin:0;font-size:.75rem;font-weight:600;
   letter-spacing:.4px;color:var(--absent);font-variation-settings:'CASL' 0.5,'MONO' 0}
 /* The policy pages are plain static documents, so these are real links that
    leave the app rather than router paths. */
@@ -505,8 +515,8 @@ function renderLanding() {
       </ol>
       <p class="closer">Your friends can sign up to bring different items and leave notes
         for you or the whole group if they need to.</p>
-      ${LEGAL_FOOTER}
-    </div>`;
+    </div>
+    ${markFooter()}`;
   document.getElementById("start").addEventListener("click", async (e) => {
     e.target.disabled = true;
     try {
@@ -1547,17 +1557,21 @@ function wireTempField(m) {
     }));
 }
 
-const LEGAL_FOOTER = `
-  <p class="legal">
-    <a href="${BASE}/privacy">Privacy</a><span>&middot;</span>
-    <a href="${BASE}/terms">Terms</a><span>&middot;</span>
-    <a href="${BASE}/cookies">Cookies</a><span>&middot;</span>
-    <a href="mailto:support@dib.works">Contact</a>
-  </p>`;
-
+// One <footer> element, always a direct child of .wrap, because .wrap is a
+// flex column and the auto top margin that pins this to the bottom of a short
+// page only works on a flex child.
 function markFooter() {
   const landing = location.pathname.replace(BASE, "").replace(/\/+$/, "") === "";
-  return (landing ? "" : `<span class="mark">bringest</span>`) + LEGAL_FOOTER;
+  return `
+  <footer class="pagefoot">
+    ${landing ? "" : `<span class="mark">bringest</span>`}
+    <p class="legal">
+      <a href="${BASE}/privacy">Privacy</a><span>&middot;</span>
+      <a href="${BASE}/terms">Terms</a><span>&middot;</span>
+      <a href="${BASE}/cookies">Cookies</a><span>&middot;</span>
+      <a href="mailto:support@dib.works">Contact</a>
+    </p>
+  </footer>`;
 }
 
 function render() {
