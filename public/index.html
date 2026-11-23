@@ -374,10 +374,6 @@ body.landing .wrap{max-width:74rem;padding:clamp(10px,2.4vw,32px) clamp(10px,2.4
   box-shadow:0 40px 70px -30px rgba(1,47,25,.45)}
 .lscreen{position:relative;aspect-ratio:390/844;border-radius:42px;overflow:hidden;background:var(--ground)}
 .lscreen video{display:block;width:100%;height:100%;object-fit:cover}
-.lstandin{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:.75rem;color:var(--absent);font-size:.9rem;font-weight:600}
-.lstandin svg{width:4.5rem;height:4.5rem;stroke:var(--edge);stroke-width:2.3;fill:none;
-  stroke-linecap:round;stroke-linejoin:round}
 .lfriends{border-top:2px solid #E1E8E4;padding:clamp(2.25rem,7vw,5.5rem) clamp(1.1rem,4vw,3rem);
   display:grid;grid-template-columns:minmax(0,1fr);gap:1.75rem;align-items:center}
 .lfriends>p{margin:0;font-size:clamp(1.3rem,2.4vw,1.75rem);line-height:1.45;font-weight:400;color:var(--note)}
@@ -602,22 +598,8 @@ function renderLanding() {
         <figure class="lvideo">
           <div class="lphone">
             <div class="lscreen">
-              <!-- Demo video goes here. Replace the stand-in div with:
-                   <video src="/demo.mp4" poster="/demo-poster.jpg" autoplay muted loop playsinline
-                     aria-label="A host making a list and sharing it, then a guest signing up"></video>
-                   media-src 'self' is already allowed in _headers. -->
-              <div class="lstandin"><svg viewBox="0 0 52 52" aria-hidden="true">
-  <path d="M7 27h38l-3.6 16a4 4 0 0 1-3.9 3H14.5a4 4 0 0 1-3.9-3z"/>
-  <path d="M4 27h44"/>
-  <path d="M17 32.5 18.5 41M26 32.5V41M35 32.5 33.5 41"/>
-  <path d="M31 25.5 41.5 12a4.2 4.2 0 0 1 6.5 5.2L38 26"/>
-  <path d="M38.5 18.5 41 21M41.5 15 44 17.5"/>
-  <circle cx="17" cy="18.5" r="7"/>
-  <path d="M17 11.5V8"/>
-  <path d="M17.5 9c2-2.2 4.4-2.4 6-1.6-.4 2.2-2.2 3.6-4.6 3.6"/>
-  <path d="M26.5 26c-1.5-4 0-8 3.5-10.5"/>
-  <path d="M28 20.5c-2.6-.6-4.5.4-5.6 2.2"/>
-</svg><span>Video coming soon</span></div>
+              <video src="/demo.mp4" poster="/demo-poster.jpg" autoplay muted loop playsinline
+                aria-label="A host making a list and sharing it, then a guest signing up"></video>
             </div>
           </div>
         </figure>
