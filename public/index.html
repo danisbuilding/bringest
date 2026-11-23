@@ -30,24 +30,65 @@
 <meta name="twitter:description" content="Bring things. Together.">
 <meta name="twitter:image" content="https://bringest.com/og.png">
 
-<link rel="preload" href="/fonts/recursive-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/fira-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/fira-sans-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-@font-face {
-  font-family: 'Recursive';
-  font-style: normal;
-  font-weight: 400 800;
-  font-display: swap;
-  src: url(/fonts/recursive-latin-ext.woff2) format('woff2');
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-@font-face {
-  font-family: 'Recursive';
-  font-style: normal;
-  font-weight: 400 800;
-  font-display: swap;
-  src: url(/fonts/recursive-latin.woff2) format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
+/* Fira Sans for everything, Fira Mono for links that are read character by
+   character. Self-hosted, latin + latin-ext subsets, so font-src 'self' holds. */
+@font-face {font-family:'Fira Sans';font-style:normal;font-weight:400;font-display:swap;
+  src:url(/fonts/fira-sans-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face {font-family:'Fira Sans';font-style:normal;font-weight:400;font-display:swap;
+  src:url(/fonts/fira-sans-latin-400-normal.woff2) format('woff2');
+  unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face {font-family:'Fira Sans';font-style:normal;font-weight:500;font-display:swap;
+  src:url(/fonts/fira-sans-latin-ext-500-normal.woff2) format('woff2');
+  unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face {font-family:'Fira Sans';font-style:normal;font-weight:500;font-display:swap;
+  src:url(/fonts/fira-sans-latin-500-normal.woff2) format('woff2');
+  unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face {font-family:'Fira Sans';font-style:normal;font-weight:600;font-display:swap;
+  src:url(/fonts/fira-sans-latin-ext-600-normal.woff2) format('woff2');
+  unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face {font-family:'Fira Sans';font-style:normal;font-weight:600;font-display:swap;
+  src:url(/fonts/fira-sans-latin-600-normal.woff2) format('woff2');
+  unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face {font-family:'Fira Sans';font-style:normal;font-weight:700;font-display:swap;
+  src:url(/fonts/fira-sans-latin-ext-700-normal.woff2) format('woff2');
+  unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face {font-family:'Fira Sans';font-style:normal;font-weight:700;font-display:swap;
+  src:url(/fonts/fira-sans-latin-700-normal.woff2) format('woff2');
+  unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face {font-family:'Fira Sans';font-style:normal;font-weight:800;font-display:swap;
+  src:url(/fonts/fira-sans-latin-ext-800-normal.woff2) format('woff2');
+  unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face {font-family:'Fira Sans';font-style:normal;font-weight:800;font-display:swap;
+  src:url(/fonts/fira-sans-latin-800-normal.woff2) format('woff2');
+  unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face {font-family:'Fira Sans';font-style:italic;font-weight:400;font-display:swap;
+  src:url(/fonts/fira-sans-latin-ext-400-italic.woff2) format('woff2');
+  unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face {font-family:'Fira Sans';font-style:italic;font-weight:400;font-display:swap;
+  src:url(/fonts/fira-sans-latin-400-italic.woff2) format('woff2');
+  unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face {font-family:'Fira Sans';font-style:italic;font-weight:700;font-display:swap;
+  src:url(/fonts/fira-sans-latin-ext-700-italic.woff2) format('woff2');
+  unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face {font-family:'Fira Sans';font-style:italic;font-weight:700;font-display:swap;
+  src:url(/fonts/fira-sans-latin-700-italic.woff2) format('woff2');
+  unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face {font-family:'Fira Mono';font-style:normal;font-weight:400;font-display:swap;
+  src:url(/fonts/fira-mono-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face {font-family:'Fira Mono';font-style:normal;font-weight:400;font-display:swap;
+  src:url(/fonts/fira-mono-latin-400-normal.woff2) format('woff2');
+  unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face {font-family:'Fira Mono';font-style:normal;font-weight:500;font-display:swap;
+  src:url(/fonts/fira-mono-latin-ext-500-normal.woff2) format('woff2');
+  unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face {font-family:'Fira Mono';font-style:normal;font-weight:500;font-display:swap;
+  src:url(/fonts/fira-mono-latin-500-normal.woff2) format('woff2');
+  unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
 
 :root{
   --ink:#012F19;          /* deep green: borders, buttons, header block */
@@ -72,8 +113,7 @@ html,body{margin:0;padding:0}
 body{
   background:var(--ground);
   color:var(--ink);
-  font-family:Recursive,system-ui,-apple-system,sans-serif;
-  font-variation-settings:'CASL' 0.45,'MONO' 0;
+  font-family:'Fira Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
   font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;
 }
 /* A flex column so the footer can take the slack with an auto top margin:
@@ -86,7 +126,6 @@ body{
   min-height:100dvh;display:flex;flex-direction:column}
 .wrap>*{flex:none}
 .pagefoot{margin-top:auto;padding-top:2.5rem}
-body.plain{background:#fff}
 
 /* ---- header photo ----
    Optional, and absent from the DOM entirely when unset. `aspect-ratio` holds
@@ -117,15 +156,17 @@ body.plain{background:#fff}
 /* ---- share + host-link blocks ---- */
 .btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.1;
   stroke-linecap:round;stroke-linejoin:round;flex:none}
-.grid1{display:grid;grid-template-columns:1fr;gap:.5rem}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.45rem}
+.grid1{display:grid;grid-template-columns:minmax(0,1fr);gap:.5rem}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.45rem}
 .grid3 .btn{padding:.4rem .3rem;font-size:.8rem;gap:.3rem}
 /* Three across needs ~330px of content and an iPhone SE offers 250, so the
    third button drops to its own full-width row rather than overflowing. */
 @media (max-width:359px){
-  .grid3{grid-template-columns:1fr 1fr}
+  .grid3{grid-template-columns:repeat(2,minmax(0,1fr))}
   .grid3 .btn:last-child{grid-column:1 / -1}
+  /* A native date box needs ~150px to show mm/dd/yyyy; half an SE row is 130. */
+  .grid2.dt{grid-template-columns:minmax(0,1fr)}
 }
 /* The host block is washed rather than white so the two never read as one
    card: the links in them have opposite audiences. */
@@ -139,7 +180,7 @@ body.plain{background:#fff}
 .head{background:var(--ink);color:#fff;border-radius:20px 12px 18px 14px/14px 18px 12px 20px;
   padding:1.1rem 1.15rem .95rem;margin-bottom:1rem}
 .head h1{font-size:1.85rem;font-weight:800;line-height:1.02;margin:0 0 .75rem;letter-spacing:-.8px;
-  text-align:center;font-variation-settings:'CASL' 0.85,'MONO' 0}
+  text-align:center}
 .row{display:flex;gap:.5rem;align-items:flex-start;margin-top:.45rem;color:var(--on-ink);
   font-size:.82rem;font-weight:600;line-height:1.4}
 .row svg{flex:none;width:15px;height:15px;margin-top:1px;stroke:var(--on-ink);stroke-width:1.9;
@@ -151,7 +192,7 @@ body.plain{background:#fff}
   stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 .chip{background:var(--ground);color:var(--ink);font-size:.82rem;font-weight:500;line-height:1;
   min-width:20px;text-align:center;padding:3.5px 5px;border-radius:4px;
-  font-variation-settings:'CASL' 0.2,'MONO' 1}
+  font-family:'Fira Mono',ui-monospace,monospace}
 
 /* ---- items ---- */
 .list{list-style:none;margin:0;padding:0}
@@ -162,45 +203,40 @@ body.plain{background:#fff}
 .item:nth-child(3n){border-radius:16px 13px 19px 10px/10px 19px 13px 16px}
 .item:hover{background:var(--hover)}
 .head-row{display:flex;align-items:center;gap:.6rem}
-.name{font-size:1.25rem;font-weight:700;flex:1;line-height:1.2;letter-spacing:-.3px;word-break:break-word;
-  font-variation-settings:'CASL' 0.8,'MONO' 0}
+.name{font-size:1.25rem;font-weight:700;flex:1;line-height:1.2;letter-spacing:-.3px;word-break:break-word}
 .count{font-size:.82rem;font-weight:500;line-height:1;white-space:nowrap;padding:4px 8px;border-radius:6px;
-  border:2px solid var(--ink);background:var(--ground);color:var(--ink);
-  font-variation-settings:'CASL' 0.25,'MONO' 0}
+  border:2px solid var(--ink);background:var(--ground);color:var(--ink)}
 .count.zero{background:var(--ink);color:#fff}
 .count.covered{border:0;background:none;color:var(--muted);font-weight:600;padding:0}
-.hostnote{font-size:.85rem;color:var(--note);margin-top:.35rem;line-height:1.45;
-  font-variation-settings:'CASL' 0.25,'MONO' 0}
+.hostnote{font-size:.85rem;color:var(--note);margin-top:.35rem;line-height:1.45}
 .sigs{margin-top:.5rem}
 .sig+.sig{margin-top:.2rem}
 .claim{display:inline-block;text-align:left;background:none;border:0;padding:.45rem .3rem;margin:-.3rem -.3rem -.25rem;
   cursor:pointer;
   font:inherit;font-size:.92rem;font-weight:700;color:var(--name);border-radius:6px;
   text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px;
-  text-decoration-color:var(--underline);font-variation-settings:'CASL' 1,'MONO' 0}
+  text-decoration-color:var(--underline)}
 .claim:hover{text-decoration-color:var(--name);background:var(--hover-name)}
 .claim:before{content:"→ ";opacity:.75;text-decoration:none}
 .sig .note{display:block;font-size:.82rem;font-weight:400;color:var(--note);line-height:1.4;
-  margin-top:1px;padding-left:1.25rem;font-variation-settings:'CASL' 0.25,'MONO' 0}
+  margin-top:1px;padding-left:1.25rem}
 span.claim{cursor:default;text-decoration:none}
-.absent{margin-top:.5rem;font-size:.82rem;font-weight:500;color:var(--absent);
-  font-variation-settings:'CASL' 0.3,'MONO' 0}
+.absent{margin-top:.5rem;font-size:.82rem;font-weight:500;color:var(--absent)}
 .tap{display:flex;align-items:center;justify-content:space-between;margin-top:.75rem;padding-top:.55rem;
-  border-top:2px solid var(--rule);font-size:.85rem;font-weight:700;color:var(--ink);
-  font-variation-settings:'CASL' 0.45,'MONO' 0}
+  border-top:2px solid var(--rule);font-size:.85rem;font-weight:700;color:var(--ink)}
 .tap svg{width:16px;height:16px;stroke:var(--ink);stroke-width:2.6;fill:none;
   stroke-linecap:round;stroke-linejoin:round;opacity:.9}
 .item.done{background:var(--wash);border-color:var(--edge);box-shadow:none}
 .item.done .name,.item.done .hostnote,.item.done .claim .note{color:var(--muted)}
 .item.done .claim{color:var(--muted)}
 .grp{font-size:1rem;font-weight:700;margin:.9rem 0 .75rem .1rem;padding-top:1.25rem;
-  border-top:2px solid var(--divider);font-variation-settings:'CASL' 0.25,'MONO' 0}
+  border-top:2px solid var(--divider)}
 
 /* ---- buttons, forms, sheets ---- */
 button{font:inherit}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;border-radius:11px;
   border:2.5px solid var(--ink);background:var(--ink);color:#fff;padding:.55rem 1.05rem;font-weight:700;
-  cursor:pointer;min-height:44px;font-variation-settings:'CASL' 0.6,'MONO' 0}
+  cursor:pointer;min-height:44px}
 .btn.ghost{background:#fff;color:var(--ink)}
 .btn.quiet{background:#fff;border-color:var(--rule);color:var(--note)}
 .btn.danger{background:#fff;border-color:var(--rule);color:var(--danger)}
@@ -210,7 +246,7 @@ button{font:inherit}
 .row-btns{display:flex;gap:.5rem;flex-wrap:wrap}
 label{display:block;font-size:.85rem;color:var(--note);margin-bottom:.25rem;font-weight:600}
 input,textarea{width:100%;font:inherit;color:var(--ink);background:#fff;border:2.5px solid var(--ink);
-  border-radius:11px;padding:.6rem .7rem;min-height:44px}
+  border-radius:11px;padding:.6rem .7rem;min-height:44px;min-width:0}
 textarea{min-height:76px;resize:vertical;line-height:1.45}
 input:focus,textarea:focus,button:focus-visible,.claim:focus-visible,.item:focus-visible{
   outline:2px solid var(--ink);outline-offset:2px}
@@ -223,7 +259,7 @@ input:focus,textarea:focus,button:focus-visible,.claim:focus-visible,.item:focus
 .sheet{background:#fff;width:100%;max-width:34rem;border:4px solid var(--ink);border-bottom:0;
   border-radius:18px 18px 0 0;padding:1.2rem 1.15rem calc(1.2rem + env(safe-area-inset-bottom));
   max-height:88vh;overflow:auto}
-.sheet h2{font-size:1.25rem;font-weight:700;margin:0 0 .9rem;font-variation-settings:'CASL' 0.8,'MONO' 0}
+.sheet h2{font-size:1.25rem;font-weight:700;margin:0 0 .9rem}
 @media (min-width:36rem){.scrim{align-items:center}.sheet{border-radius:18px;border-bottom:4px solid var(--ink)}}
 @media (prefers-reduced-motion:no-preference){
   .sheet{animation:rise .18s ease-out}
@@ -232,16 +268,15 @@ input:focus,textarea:focus,button:focus-visible,.claim:focus-visible,.item:focus
 
 /* ---- host chrome ---- */
 .bar-top{display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin-bottom:1rem}
-h1{font-size:1.75rem;font-weight:800;letter-spacing:-.6px;margin:0;
-  font-variation-settings:'CASL' 0.85,'MONO' 0}
-h2{font-size:1.15rem;font-weight:700;margin:0;font-variation-settings:'CASL' 0.6,'MONO' 0}
+h1{font-size:1.75rem;font-weight:800;letter-spacing:-.6px;margin:0}
+h2{font-size:1.15rem;font-weight:700;margin:0}
 .card{display:block;border:4px solid var(--ink);background:#fff;box-shadow:4px 4px 0 var(--ink);
   border-radius:18px 11px 16px 13px/13px 16px 11px 18px;padding:.85rem .95rem;margin-bottom:.75rem;
   text-decoration:none;color:inherit}
 .card.archived{background:var(--wash);border-color:var(--edge);box-shadow:none}
 .share{background:#fff;border:2.5px solid var(--ink);border-radius:12px;padding:.8rem .9rem;margin-bottom:1.1rem}
 .share code,.hostbox code{display:block;word-break:break-all;font-size:.8rem;margin:.35rem 0 .6rem;
-  font-variation-settings:'CASL' 0.2,'MONO' 1}
+  font-family:'Fira Mono',ui-monospace,monospace}
 .empty{border:2.5px dashed var(--edge);border-radius:12px;padding:1.4rem;text-align:center;color:var(--note)}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:1.25rem;background:var(--ink);color:#fff;
   padding:.6rem 1rem;border-radius:11px;font-size:.9rem;z-index:40;max-width:90vw}
@@ -249,31 +284,28 @@ h2{font-size:1.15rem;font-weight:700;margin:0;font-variation-settings:'CASL' 0.6
   border-radius:0 10px 10px 0;font-size:.9rem}
 
 /* ---- dish line under a chef ---- */
-.dish{display:block;font-size:.95rem;font-weight:600;color:var(--ink);line-height:1.3;
-  font-variation-settings:'CASL' 0.45,'MONO' 0}
+.dish{display:block;font-size:.95rem;font-weight:600;color:var(--ink);line-height:1.3}
 .meta-line{display:block;font-size:.8rem;font-weight:500;color:var(--note);line-height:1.4;
-  margin-top:1px;font-variation-settings:'CASL' 0.25,'MONO' 0}
+  margin-top:1px}
 label .sub{font-weight:400}
 
 /* ---- hot / cold ---- */
 .choice{display:flex;gap:.5rem}
 .choice button{flex:1;min-height:48px;border:2.5px solid var(--ink);background:#fff;color:var(--ink);
-  border-radius:11px;font-weight:700;font-size:.95rem;cursor:pointer;
-  font-variation-settings:'CASL' 0.5,'MONO' 0}
+  border-radius:11px;font-weight:700;font-size:.95rem;cursor:pointer}
 .choice button[aria-pressed="true"]{background:var(--ink);color:#fff}
 
 /* ---- host-only notes ---- */
 .notes{border:4px solid var(--ink);background:#fff;box-shadow:4px 4px 0 var(--ink);
   border-radius:16px 13px 19px 10px/10px 19px 13px 16px;padding:.85rem .95rem;margin-bottom:1rem}
 .notes-top{display:flex;align-items:center;gap:.6rem}
-.notes-top b{flex:1;font-size:1.05rem;font-weight:700;font-variation-settings:'CASL' 0.7,'MONO' 0}
+.notes-top b{flex:1;font-size:1.05rem;font-weight:700}
 .notes-count{font-size:.8rem;font-weight:500;line-height:1;padding:4px 8px;border-radius:6px;
-  background:var(--ink);color:#fff;font-variation-settings:'CASL' 0.25,'MONO' 0}
+  background:var(--ink);color:#fff}
 .note-item{padding:.6rem 0;border-bottom:1px solid var(--rule)}
 .note-item:last-of-type{border-bottom:0;padding-bottom:.2rem}
-.note-from{font-size:.82rem;font-weight:700;color:var(--name);
-  font-variation-settings:'CASL' 0.9,'MONO' 0}
-.note-from span{font-weight:500;color:var(--note);font-variation-settings:'CASL' 0.25,'MONO' 0}
+.note-from{font-size:.82rem;font-weight:700;color:var(--name)}
+.note-from span{font-weight:500;color:var(--note)}
 .note-body{font-size:.88rem;color:var(--note);line-height:1.45;margin-top:2px}
 .notes-foot{margin-top:.7rem;padding-top:.6rem;border-top:2px solid var(--rule)}
 
@@ -284,16 +316,14 @@ label .sub{font-weight:400}
 .swatch[aria-pressed="true"]{border-width:4px}
 .swatch .bar{display:flex;align-items:center;justify-content:space-between;
   border-radius:6px 4px 6px 5px/5px 6px 4px 6px;padding:4px 6px;margin-bottom:5px}
-.swatch .bar b{font-size:10px;font-weight:800;letter-spacing:-.2px;color:#fff;
-  font-variation-settings:'CASL' 0.85,'MONO' 0}
+.swatch .bar b{font-size:10px;font-weight:800;letter-spacing:-.2px;color:#fff}
 .swatch .bar i{font-size:8px;font-weight:700;font-style:normal;border-radius:3px;padding:1.5px 4px}
 .swatch .card{display:flex;align-items:baseline;gap:5px;border-width:2px;border-style:solid;
   background:#fff;border-radius:6px 4px 6px 5px/5px 6px 4px 6px;padding:4px 6px;
   box-shadow:2px 2px 0 currentColor}
-.swatch .card em{font-size:9.5px;font-weight:700;font-style:normal;line-height:1.2;
-  font-variation-settings:'CASL' 0.8,'MONO' 0}
+.swatch .card em{font-size:9.5px;font-weight:700;font-style:normal;line-height:1.2}
 .swatch .card u{font-size:9px;font-weight:700;text-decoration:underline;text-underline-offset:2px;
-  margin-left:auto;font-variation-settings:'CASL' 1,'MONO' 0}
+  margin-left:auto}
 .swatch .tick{position:absolute;right:6px;bottom:6px;width:17px;height:17px;border-radius:50%;
   display:none;align-items:center;justify-content:center}
 .swatch[aria-pressed="true"] .tick{display:flex}
@@ -303,42 +333,75 @@ label .sub{font-weight:400}
 .muted{color:var(--note)}
 .tiny{font-size:.85rem}
 .stack>*+*{margin-top:.9rem}
-.lede{font-size:1.05rem;color:var(--note);max-width:30rem}
-.wordmark{display:flex;align-items:center;gap:.5rem;font-size:2.6rem;font-weight:800;
-  letter-spacing:-1.4px;margin:.5rem 0 0;font-variation-settings:'CASL' 0.9,'MONO' 0}
-.basket{flex:none;width:3.1rem;height:3.1rem;stroke:var(--ink);stroke-width:2.3;fill:none;
+/* ---- landing ----
+   A white sheet with an ink border on the ground colour, an ink header bar,
+   then hero, the three steps beside the demo video, and the closing line.
+   Stacked on a phone; two columns from 48rem. The landing route widens .wrap
+   (body.landing below); every other route keeps the 34rem column. */
+body.landing .wrap{max-width:74rem;padding:clamp(10px,2.4vw,32px) clamp(10px,2.4vw,32px) 1.2rem}
+.lsheet{background:#fff;border:3px solid var(--ink);border-radius:clamp(22px,3vw,32px);overflow:hidden}
+.lbar{background:var(--ink);color:#fff;padding:1rem 1.15rem;display:flex;justify-content:center}
+.lmark{display:flex;align-items:center;gap:.6rem;margin:0;font-size:1.6rem;font-weight:800;
+  letter-spacing:-.5px;line-height:1;color:#fff}
+.lmark svg{flex:none;width:2.5rem;height:2.5rem;stroke:#fff;stroke-width:2.6;fill:none;
   stroke-linecap:round;stroke-linejoin:round}
-.slogan{font-size:1.15rem;font-weight:600;color:var(--name);margin:.35rem 0 1.4rem;
-  font-variation-settings:'CASL' 0.6,'MONO' 0}
-/* Prose on the landing page. Left-aligned even where the wordmark above it is
-   centred: centred paragraphs are hard to read once they wrap, which on a phone
-   they always do. */
-/* No max-width here. The .wrap above already caps the column at 34rem, so a
-   second, narrower cap only centred these inside their own siblings and left
-   them indented against the wordmark on any screen wider than 30rem. */
-.pitch,.closer{font-size:.97rem;line-height:1.55;color:var(--note);text-align:left}
-.pitch{margin-bottom:.4rem}
-.steps{counter-reset:step;list-style:none;padding:0;margin:1.5rem 0 .2rem;
-  text-align:left}
-.steps li{counter-increment:step;position:relative;padding-left:2.4rem;margin-bottom:.85rem;
-  font-size:.95rem;line-height:1.5;color:var(--ink)}
-.steps li:last-child{margin-bottom:0}
-.steps li b{font-weight:700}
-/* Its own line, in the accent rather than the danger red: losing the host link
-   is the worst thing that can happen here, but this is a landing page and red
-   would read as an error that has already occurred. */
-.steps li em{display:block;margin-top:.1rem;font-style:italic;font-weight:600;color:var(--name)}
-.steps li::before{content:counter(step);position:absolute;left:0;top:-.1rem;
-  width:1.65rem;height:1.65rem;border-radius:50%;background:var(--ink);color:#fff;
-  display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:800;
-  font-variation-settings:'CASL' 0,'MONO' 1}
+.lhero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:1.35rem;
+  padding:clamp(3rem,9vw,7rem) clamp(1.1rem,4vw,3rem) clamp(2.75rem,8vw,6.5rem)}
+.lhero h1{font-size:clamp(3.1rem,8vw,6rem);line-height:.98;font-weight:800;letter-spacing:-.035em;margin:0}
+.lhero p{margin:0;max-width:32.5rem;font-size:clamp(1.1rem,2vw,1.3rem);line-height:1.5;color:var(--note)}
+.lstart{min-height:56px;padding:0 1.9rem;border-radius:14px;font-size:1.1rem;gap:.6rem;margin-top:.35rem}
+.lstart svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.4;
+  stroke-linecap:round;stroke-linejoin:round}
+.lhow{background:#F7FBFA;border-top:2px solid #E1E8E4;padding:clamp(2.25rem,7vw,6rem) clamp(1rem,4vw,3rem);
+  display:grid;grid-template-columns:minmax(0,1fr);gap:2.5rem;align-items:start}
+.lsteps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.1rem}
+.lstep{border:3px solid var(--ink);border-radius:20px;padding:6px;background:#EAF2EE}
+.lstep h2{display:flex;align-items:center;gap:.75rem;min-height:48px;margin:0;padding:.5rem 1rem .5rem .55rem;
+  border-radius:14px;background:var(--ink);color:#fff;font-size:clamp(1.06rem,1.6vw,1.19rem);
+  font-weight:700;line-height:1.2;letter-spacing:0}
+.lnum{flex:none;width:30px;height:30px;border-radius:8px;background:var(--ground);color:var(--ink);
+  display:flex;align-items:center;justify-content:center;font-size:.95rem;font-weight:700;
+  font-variant-numeric:tabular-nums}
+.lstep-b{padding:.75rem .75rem .65rem;display:flex;flex-direction:column;gap:.6rem}
+.lstep-b p{margin:0;font-size:clamp(1rem,1.4vw,1.06rem);line-height:1.5;color:var(--note)}
+.lstep-b b{color:var(--ink);font-weight:700}
+.lstep-b .lsave{font-style:italic;font-weight:700;color:var(--ink)}
+/* The demo video's frame. Until the video is published this holds a stand-in;
+   the screen's aspect ratio is the recording's (390x844), so the swap does not
+   move anything. */
+.lvideo{display:flex;justify-content:center;margin:0}
+.lphone{width:min(320px,100%);padding:10px;border-radius:52px;background:var(--ink);
+  box-shadow:0 40px 70px -30px rgba(1,47,25,.45)}
+.lscreen{position:relative;aspect-ratio:390/844;border-radius:42px;overflow:hidden;background:var(--ground)}
+.lscreen video{display:block;width:100%;height:100%;object-fit:cover}
+.lstandin{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.75rem;color:var(--absent);font-size:.9rem;font-weight:600}
+.lstandin svg{width:4.5rem;height:4.5rem;stroke:var(--edge);stroke-width:2.3;fill:none;
+  stroke-linecap:round;stroke-linejoin:round}
+.lfriends{border-top:2px solid #E1E8E4;padding:clamp(2.25rem,7vw,5.5rem) clamp(1.1rem,4vw,3rem);
+  display:grid;grid-template-columns:minmax(0,1fr);gap:1.75rem;align-items:center}
+.lfriends>p{margin:0;font-size:clamp(1.3rem,2.4vw,1.75rem);line-height:1.45;font-weight:400;color:var(--note)}
+.lpie{display:flex;flex-direction:column;gap:.65rem;padding-right:12px;max-width:24rem}
+.lpie-row{position:relative;display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  min-height:56px;padding:0 2.1rem 0 1.1rem;background:#fff;border:3px solid var(--ink);border-radius:14px}
+.lpie-row b{font-size:1.12rem;font-weight:700}
+.lpie-row u{font-size:1rem;color:var(--muted);text-decoration:underline dotted;text-underline-offset:3px}
+.lpie-tick{position:absolute;right:-12px;bottom:-12px;width:32px;height:32px;border-radius:50%;
+  background:var(--ink);border:3px solid #fff;display:flex;align-items:center;justify-content:center}
+.lpie-tick svg{width:14px;height:14px;stroke:#fff;stroke-width:3.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.lpie-note{align-self:flex-start;max-width:17.5rem;margin-left:12px;background:#EAF2EE;
+  border-radius:4px 14px 14px 14px;padding:.75rem .9rem;font-size:.95rem;line-height:1.4;color:var(--ink)}
+.lpie-note b{font-weight:700}
+@media (min-width:48rem){
+  .lhow{grid-template-columns:minmax(0,1fr) 320px;gap:clamp(2.5rem,7vw,6.5rem)}
+  .lfriends{grid-template-columns:minmax(0,1fr) minmax(0,22rem);gap:clamp(2.5rem,7vw,6.5rem)}
+}
 /* The gap above the footer is .pagefoot's padding now, not this margin. */
 .mark{display:block;text-align:center;margin:0;font-size:.75rem;font-weight:600;
-  letter-spacing:.4px;color:var(--absent);font-variation-settings:'CASL' 0.5,'MONO' 0}
+  letter-spacing:.4px;color:var(--absent)}
 /* The policy pages are plain static documents, so these are real links that
    leave the app rather than router paths. */
-.legal{text-align:center;margin:.5rem 0 0;font-size:.75rem;color:var(--absent);
-  font-variation-settings:'CASL' 0.5,'MONO' 0;line-height:1.9}
+.legal{text-align:center;margin:.5rem 0 0;font-size:.75rem;color:var(--absent);line-height:1.9}
 .mark+.legal{margin-top:.35rem}
 .legal a{color:var(--absent);text-decoration:none;border-bottom:1px solid var(--edge);
   white-space:nowrap}
@@ -486,45 +549,91 @@ window.addEventListener("popstate", render);
 function renderLanding() {
   applyTheme("forest");
   app.innerHTML = `
-    <div class="stack">
-      <h1 class="wordmark"><svg class="basket" viewBox="0 0 52 52" aria-hidden="true">
-  <!-- basket -->
+    <main class="lsheet">
+      <header class="lbar">
+        <p class="lmark"><svg viewBox="0 0 52 52" aria-hidden="true">
   <path d="M7 27h38l-3.6 16a4 4 0 0 1-3.9 3H14.5a4 4 0 0 1-3.9-3z"/>
   <path d="M4 27h44"/>
   <path d="M17 32.5 18.5 41M26 32.5V41M35 32.5 33.5 41"/>
-  <!-- baguette -->
   <path d="M31 25.5 41.5 12a4.2 4.2 0 0 1 6.5 5.2L38 26"/>
   <path d="M38.5 18.5 41 21M41.5 15 44 17.5"/>
-  <!-- apple -->
   <circle cx="17" cy="18.5" r="7"/>
   <path d="M17 11.5V8"/>
   <path d="M17.5 9c2-2.2 4.4-2.4 6-1.6-.4 2.2-2.2 3.6-4.6 3.6"/>
-  <!-- greens -->
   <path d="M26.5 26c-1.5-4 0-8 3.5-10.5"/>
   <path d="M28 20.5c-2.6-.6-4.5.4-5.6 2.2"/>
-</svg><span>Bringest</span></h1>
-      <p class="slogan">Bring things. Together.</p>
-      <p class="pitch">Bringest helps people sign up to bring dishes for collective meals.</p>
-      <button class="btn" id="start">Start here</button>
-      <ol class="steps">
-        <li>Click <b>&ldquo;Start here&rdquo;</b> to open your hosting page.
-          <em>Make sure to save your link; you can't get it later.</em></li>
-        <li><b>Create a new event</b> and fill out details like date, location, the types
-          of items people should sign up to bring, and how many volunteers you need.</li>
-        <li><b>Copy the guest link and send it.</b></li>
-      </ol>
-      <p class="closer">Your friends can sign up to bring different items and leave notes
-        for you or the whole group if they need to.</p>
-    </div>
+</svg><span>Bringest</span></p>
+      </header>
+      <section class="lhero">
+        <h1>Bring things.<br>Together.</h1>
+        <p>Bringest helps people sign up to bring dishes for collective meals.</p>
+        <button class="btn lstart" id="start">Start here<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </section>
+      <section class="lhow" aria-label="How it works">
+        <ol class="lsteps">
+          <li class="lstep">
+            <h2><span class="lnum">1</span>Open your hosting page</h2>
+            <div class="lstep-b">
+              <p>Click <b>&ldquo;Start here&rdquo;</b> to open your hosting page.</p>
+              <p class="lsave">Make sure to save your link; you can't get it later.</p>
+            </div>
+          </li>
+          <li class="lstep">
+            <h2><span class="lnum">2</span>Create a new event</h2>
+            <div class="lstep-b">
+              <p><b>Create a new event</b> and fill out details like date, location, the types
+                of items people should sign up to bring, and how many volunteers you need.</p>
+            </div>
+          </li>
+          <li class="lstep">
+            <h2><span class="lnum">3</span>Send the guest link</h2>
+            <div class="lstep-b">
+              <p><b>Copy the guest link and send it.</b></p>
+            </div>
+          </li>
+        </ol>
+        <figure class="lvideo">
+          <div class="lphone">
+            <div class="lscreen">
+              <!-- Demo video goes here. Replace the stand-in div with:
+                   <video src="/demo.mp4" poster="/demo-poster.jpg" autoplay muted loop playsinline
+                     aria-label="A host making a list and sharing it, then a guest signing up"></video>
+                   media-src 'self' is already allowed in _headers. -->
+              <div class="lstandin"><svg viewBox="0 0 52 52" aria-hidden="true">
+  <path d="M7 27h38l-3.6 16a4 4 0 0 1-3.9 3H14.5a4 4 0 0 1-3.9-3z"/>
+  <path d="M4 27h44"/>
+  <path d="M17 32.5 18.5 41M26 32.5V41M35 32.5 33.5 41"/>
+  <path d="M31 25.5 41.5 12a4.2 4.2 0 0 1 6.5 5.2L38 26"/>
+  <path d="M38.5 18.5 41 21M41.5 15 44 17.5"/>
+  <circle cx="17" cy="18.5" r="7"/>
+  <path d="M17 11.5V8"/>
+  <path d="M17.5 9c2-2.2 4.4-2.4 6-1.6-.4 2.2-2.2 3.6-4.6 3.6"/>
+  <path d="M26.5 26c-1.5-4 0-8 3.5-10.5"/>
+  <path d="M28 20.5c-2.6-.6-4.5.4-5.6 2.2"/>
+</svg><span>Video coming soon</span></div>
+            </div>
+          </div>
+        </figure>
+      </section>
+      <section class="lfriends">
+        <p>Your friends can sign up to bring different items and leave notes for you or the
+          whole group if they need to.</p>
+        <div class="lpie" aria-hidden="true">
+          <div class="lpie-row"><b>Pie</b><u>Nadia</u><span class="lpie-tick"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span></div>
+          <div class="lpie-note"><b>Nadia:</b> Pumpkin, not pecan. Bringing whipped cream too!</div>
+        </div>
+      </section>
+    </main>
     ${markFooter()}`;
   document.getElementById("start").addEventListener("click", async (e) => {
-    e.target.disabled = true;
+    const btn = e.currentTarget;
+    btn.disabled = true;
     try {
       const { host_key } = await api("hosts", { method: "POST", body: {} });
       localStorage.setItem("bringest_host_key", host_key);
       go("/h/" + host_key);
     } catch (err) {
-      e.target.disabled = false;
+      btn.disabled = false;
       toast(err.message);
     }
   });
@@ -1039,7 +1148,7 @@ function dateField(event) {
   return `
     <div class="field">
       <label>Exact date and time <span class="opt">&mdash; optional</span></label>
-      <div class="grid2">
+      <div class="grid2 dt">
         <input id="sd" type="date" aria-label="Date" value="${esc(v.slice(0, 10))}">
         <input id="st" type="time" aria-label="Time" value="${esc(v.length > 10 ? v.slice(11) : "")}">
       </div>
@@ -1564,7 +1673,7 @@ function markFooter() {
   const landing = location.pathname.replace(BASE, "").replace(/\/+$/, "") === "";
   return `
   <footer class="pagefoot">
-    ${landing ? "" : `<span class="mark">bringest</span>`}
+    ${landing ? "" : `<span class="mark">Bringest</span>`}
     <p class="legal">
       <a href="${BASE}/privacy">Privacy</a><span>&middot;</span>
       <a href="${BASE}/terms">Terms</a><span>&middot;</span>
@@ -1582,7 +1691,7 @@ function render() {
   // The landing page is anything that is not a guest or host route, including
   // a bare / and /index.html.
   const landing = !(parts[0] === "e" && parts[1]) && !(parts[0] === "h" && parts[1]);
-  document.body.classList.toggle("plain", landing);
+  document.body.classList.toggle("landing", landing);
   if (parts[0] === "e" && parts[1]) return renderGuest(parts[1]);
   if (parts[0] === "h" && parts[1] && parts[2]) return renderEditor(parts[1], parts[2]);
   if (parts[0] === "h" && parts[1]) return renderDashboard(parts[1]);

@@ -31,7 +31,7 @@ No AI, no payments, no tracking cookies, and the only third party is Cloudflare.
 
 ```
 public/index.html          the whole frontend: router, views, styles
-public/fonts/              self-hosted Recursive variable woff2
+public/fonts/              self-hosted Fira Sans + Fira Mono woff2 (Recursive kept for tools/build_brand.py)
 public/_redirects          /h/* and /e/* -> index.html
 public/_headers            CSP and security headers
 functions/api/[[path]].js  the whole API, one onRequest handler
