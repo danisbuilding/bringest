@@ -410,6 +410,11 @@ body.landing .wrap{max-width:74rem;padding:clamp(10px,2.4vw,32px) clamp(10px,2.4
   white-space:nowrap}
 .legal a:hover{color:var(--ink);border-bottom-color:var(--ink)}
 .legal span{margin:0 .45rem;opacity:.55}
+.maker{text-align:center;margin:.55rem 0 0;font-size:.75rem;line-height:1.7;color:var(--absent)}
+.maker b{font-weight:700;color:var(--note)}
+.maker a{color:var(--absent);text-decoration:none;border-bottom:1px solid var(--edge)}
+.maker a:hover{color:var(--ink);border-bottom-color:var(--ink)}
+.maker span{margin:0 .45rem;opacity:.55}
 
 </style>
 </head>
@@ -1669,6 +1674,8 @@ function markFooter() {
       <a href="${BASE}/cookies">Cookies</a><span>&middot;</span>
       <a href="mailto:support@dib.works">Contact</a>
     </p>
+    <p class="maker">Bringest is a <b>DIB&nbsp;Works</b> product, operated by LVT8&nbsp;Technical&nbsp;LLC.<br>
+      <a href="mailto:support@dib.works">support@dib.works</a><span>&middot;</span>&copy; ${new Date().getFullYear()}</p>
   </footer>`;
 }
 

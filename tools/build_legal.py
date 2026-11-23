@@ -7,6 +7,7 @@ The source of truth is the markdown in legal/. These pages are
 generated, so edit the markdown and re-run rather than editing the HTML.
 """
 
+import datetime
 import html
 import pathlib
 import re
@@ -183,6 +184,9 @@ tr:last-child td{{border-bottom:0}}
   font-size:.84rem;color:var(--note);
 }}
 .foot a{{margin-right:1rem;white-space:nowrap}}
+.foot .maker{{margin:.9rem 0 0;font-size:.78rem;line-height:1.7;color:var(--absent)}}
+.foot .maker b{{font-weight:700;color:var(--note)}}
+.foot .maker a{{margin:0;color:var(--absent)}}
 
 @media (max-width:420px){{
   .wrap{{padding-top:1.1rem}}
@@ -201,6 +205,8 @@ tr:last-child td{{border-bottom:0}}
   </main>
   <div class="foot">
 {nav}
+    <p class="maker">Bringest is a <b>DIB&nbsp;Works</b> product, operated by LVT8&nbsp;Technical&nbsp;LLC.<br>
+      <a href="mailto:support@dib.works">support@dib.works</a> &middot; &copy; {year}</p>
   </div>
 </div>
 </body>
@@ -252,6 +258,7 @@ def build(src_name, out_name, title):
         desc=html.escape(first_sentence(text), quote=True),
         body=body,
         nav=nav,
+        year=datetime.date.today().year,
     )
     (OUT / out_name).write_text(page, encoding="utf-8")
     print(f"{out_name}: {len(page):,} bytes")
