@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Vibring</title>
+<title>Bringest</title>
 <meta name="referrer" content="no-referrer">
 <link rel="preload" href="/fonts/recursive-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
@@ -276,6 +276,22 @@ label .sub{font-weight:400}
   stroke-linecap:round;stroke-linejoin:round}
 .slogan{font-size:1.15rem;font-weight:600;color:var(--name);margin:.35rem 0 1.4rem;
   font-variation-settings:'CASL' 0.6,'MONO' 0}
+/* Prose on the landing page. Left-aligned even where the wordmark above it is
+   centred: centred paragraphs are hard to read once they wrap, which on a phone
+   they always do. */
+.pitch,.closer{font-size:.97rem;line-height:1.55;color:var(--note);text-align:left;
+  max-width:30rem;margin-left:auto;margin-right:auto}
+.pitch{margin-bottom:.4rem}
+.steps{counter-reset:step;list-style:none;padding:0;margin:1.5rem auto .2rem;
+  text-align:left;max-width:30rem}
+.steps li{counter-increment:step;position:relative;padding-left:2.4rem;margin-bottom:.85rem;
+  font-size:.95rem;line-height:1.5;color:var(--ink)}
+.steps li:last-child{margin-bottom:0}
+.steps li b{font-weight:700}
+.steps li::before{content:counter(step);position:absolute;left:0;top:-.1rem;
+  width:1.65rem;height:1.65rem;border-radius:50%;background:var(--ink);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:800;
+  font-variation-settings:'CASL' 0,'MONO' 1}
 .mark{display:block;text-align:center;margin-top:2rem;font-size:.75rem;font-weight:600;
   letter-spacing:.4px;color:var(--absent);font-variation-settings:'CASL' 0.5,'MONO' 0}
 
@@ -436,17 +452,28 @@ function renderLanding() {
   <!-- greens -->
   <path d="M26.5 26c-1.5-4 0-8 3.5-10.5"/>
   <path d="M28 20.5c-2.6-.6-4.5.4-5.6 2.2"/>
-</svg><span>Vibring</span></h1>
+</svg><span>Bringest</span></h1>
       <p class="slogan">Bring things. Together.</p>
+      <p class="pitch">Bringest is a simple web app that helps people sign up to bring
+        things for collective meals. A host creates an invite, sends a link to friends,
+        and everyone can share what they're bringing with relevant notes.</p>
       <button class="btn" id="start">Start a list</button>
-      <p class="tiny muted">You'll get a private link that holds all your gatherings. Bookmark it —
-      it's the only way back in.</p>
+      <p class="tiny muted">You'll get a private link that holds all your gatherings.
+        Save it &mdash; it's the only way back in.</p>
+      <ol class="steps">
+        <li><b>Open your hosting page.</b> Make sure to save your link.</li>
+        <li><b>Create a new event</b> and fill out details like date, location, the types
+          of items people should sign up to bring, and how many volunteers you need.</li>
+        <li><b>Copy the guest link and send it.</b></li>
+      </ol>
+      <p class="closer">Your friends can sign up to bring different items and leave notes
+        for you or the whole group if they need to.</p>
     </div>`;
   document.getElementById("start").addEventListener("click", async (e) => {
     e.target.disabled = true;
     try {
       const { host_key } = await api("hosts", { method: "POST", body: {} });
-      localStorage.setItem("potluck_host_key", host_key);
+      localStorage.setItem("bringest_host_key", host_key);
       go("/h/" + host_key);
     } catch (err) {
       e.target.disabled = false;
@@ -467,7 +494,7 @@ async function renderDashboard(key) {
       <a class="btn ghost" href="/">Start a new list</a></div>`;
     return;
   }
-  localStorage.setItem("potluck_host_key", key);
+  localStorage.setItem("bringest_host_key", key);
 
   const active = data.events.filter((e) => !e.archived);
   const archived = data.events.filter((e) => e.archived);
@@ -499,7 +526,7 @@ async function renderDashboard(key) {
   document.getElementById("copykey").addEventListener("click", () => copy(location.origin + BASE + "/h/" + key, "Host link copied"));
   document.getElementById("emailkey").addEventListener("click", () =>
     mailLink(
-      `Your private Vibring host link — this is how you get back to your gatherings. ` +
+      `Your private Bringest host link — this is how you get back to your gatherings. ` +
       `Keep it to yourself; anyone with it can edit your lists.\n\n` +
       `${location.origin}${BASE}/h/${key}\n`
     ));
@@ -603,7 +630,7 @@ function newEventSheet(key) {
 // Opens the person's own mail app with the link pre-filled. No sending service,
 // no API key — they press send themselves.
 function mailLink(body) {
-  const subject = encodeURIComponent("My Vibring Event Code");
+  const subject = encodeURIComponent("My Bringest Event Code");
   location.href = `mailto:?subject=${subject}&body=${encodeURIComponent(body)}`;
 }
 
@@ -907,10 +934,10 @@ function buildIcs(event, hostUrl) {
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Vibring//Gathering//EN",
+    "PRODID:-//Bringest//Gathering//EN",
     "CALSCALE:GREGORIAN",
     "BEGIN:VEVENT",
-    `UID:${event.id}@vibring`,
+    `UID:${event.id}@bringest`,
     `DTSTAMP:${stamp}`,
     timed
       ? `DTSTART:${dt.replace(/[-:]/g, "")}00`
@@ -1010,7 +1037,7 @@ function wireShareBlocks(event, key, guestUrl) {
 
   on("emailme", () =>
     mailLink(
-      `Your private Vibring host link — this is how you get back to your gatherings. ` +
+      `Your private Bringest host link — this is how you get back to your gatherings. ` +
       `Keep it to yourself; anyone with it can edit your lists.\n\n` +
       `${hostUrl}\n\n` +
       `Guest link for "${event.title}" — this one is safe to share:\n\n` +
@@ -1324,7 +1351,7 @@ function guestRow(item) {
 
 function signSheet(item) {
   const remaining = item.qty_needed - claimed(item);
-  const saved = localStorage.getItem("vibring_name") || "";
+  const saved = localStorage.getItem("bringest_name") || "";
   openSheet(`
     <h2>${esc(item.name)}</h2>
     ${item.host_note ? `<div class="hostnote" style="margin:0 0 .9rem">${esc(item.host_note)}</div>` : ""}
@@ -1368,7 +1395,7 @@ function signSheet(item) {
             note_to_host: m.querySelector("#hn").value,
           },
         });
-        localStorage.setItem("vibring_name", name);
+        localStorage.setItem("bringest_name", name);
         state.items = data.items;
         closeSheet();
         paintGuest();
@@ -1473,7 +1500,7 @@ function wireTempField(m) {
 
 function markFooter() {
   if (location.pathname.replace(BASE, "").replace(/\/+$/, "") === "") return "";
-  return `<span class="mark">vibring</span>`;
+  return `<span class="mark">bringest</span>`;
 }
 
 function render() {
@@ -1481,8 +1508,8 @@ function render() {
   let path = location.pathname;
   if (BASE && path.startsWith(BASE)) path = path.slice(BASE.length);
   const parts = path.split("/").filter(Boolean).filter((seg) => seg !== "index.html");
-  // the landing page is anything that isn't a guest or host route, including
-  // /vibring/ and /vibring/index.html
+  // The landing page is anything that is not a guest or host route, including
+  // a bare / and /index.html.
   const landing = !(parts[0] === "e" && parts[1]) && !(parts[0] === "h" && parts[1]);
   document.body.classList.toggle("plain", landing);
   if (parts[0] === "e" && parts[1]) return renderGuest(parts[1]);
