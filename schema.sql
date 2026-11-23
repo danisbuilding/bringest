@@ -16,6 +16,9 @@ CREATE TABLE IF NOT EXISTS events (
   location    TEXT,
   description TEXT,
   archived    INTEGER NOT NULL DEFAULT 0,
+  -- Optional floating local start, "YYYY-MM-DDTHH:MM", no zone. Only used to
+  -- build a calendar file; when_text remains what guests read.
+  starts_at   TEXT,
   -- Colour theme key; NULL = forest. See THEMES in index.html.
   theme       TEXT,
   -- Public path of the header image, e.g. /img/<event id>/<token>.jpg.

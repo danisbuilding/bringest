@@ -50,6 +50,28 @@ function serves(value) {
   return Math.min(999, n);
 }
 
+// A floating local date-time, "YYYY-MM-DDTHH:MM", with no zone and no offset:
+// 3pm means 3pm where the gathering is, and a stored offset would be wrong the
+// moment a guest in another zone read it. Optional — when_text stays the thing
+// guests actually see, and this exists so a calendar file can be generated.
+function startsAt(value) {
+  // Deliberately not clean(): that truncates to the limit, which would turn a
+  // malformed "2026-11-28T15:00:00" into a valid-looking value instead of
+  // rejecting it. A fixed-shape field is checked whole or not at all.
+  const v = clean(value, 64);
+  if (!v || v.length > 16) return null;
+  // A bare date is allowed and means an all-day entry; a host who knows the day
+  // but not the hour should not have one guessed for them.
+  if (!/^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2})?$/.test(v)) return null;
+  const [y, mo, d] = v.slice(0, 10).split("-").map(Number);
+  const [h, mi] = v.length > 10 ? v.slice(11).split(":").map(Number) : [0, 0];
+  if (mo < 1 || mo > 12 || d < 1 || h > 23 || mi > 59) return null;
+  // Rejects a date that does not exist, such as 2026-02-30.
+  const probe = new Date(Date.UTC(y, mo - 1, d));
+  if (probe.getUTCMonth() !== mo - 1 || probe.getUTCDate() !== d) return null;
+  return v;
+}
+
 // Sniffed from the bytes, never from the content-type header, which the caller
 // controls. Only JPEG is accepted: the editor always encodes JPEG, so anything
 // else means the upload did not come from it.
@@ -239,8 +261,8 @@ export async function onRequest(context) {
       const id = uid();
       const created = await db
         .prepare(
-          `INSERT INTO events (id, host_id, slug, title, when_text, location, description, archived, theme, created_at)
-           SELECT ?, ?, ?, ?, ?, ?, ?, 0, ?, ?
+          `INSERT INTO events (id, host_id, slug, title, when_text, starts_at, location, description, archived, theme, created_at)
+           SELECT ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?
            WHERE (SELECT COUNT(*) FROM events WHERE host_id = ? AND archived = 0) < ?`
         )
         .bind(
@@ -249,6 +271,7 @@ export async function onRequest(context) {
           token(12),
           clean(body.title, 120) || "Untitled gathering",
           clean(body.when_text, 120),
+          startsAt(body.starts_at),
           clean(body.location, 200),
           clean(body.description, 1000),
           themeKey(body.theme),
@@ -280,13 +303,14 @@ export async function onRequest(context) {
         // re-checked inside the write rather than before it.
         const updated = await db
           .prepare(
-            `UPDATE events SET title = ?, when_text = ?, location = ?, description = ?, archived = ?, theme = ?
+            `UPDATE events SET title = ?, when_text = ?, starts_at = ?, location = ?, description = ?, archived = ?, theme = ?
              WHERE id = ?
                AND (? = 0 OR (SELECT COUNT(*) FROM events WHERE host_id = ? AND archived = 0) < ?)`
           )
           .bind(
             clean(body.title, 120) || e.title,
             "when_text" in body ? clean(body.when_text, 120) : e.when_text,
+            "starts_at" in body ? startsAt(body.starts_at) : e.starts_at,
             "location" in body ? clean(body.location, 200) : e.location,
             "description" in body ? clean(body.description, 1000) : e.description,
             nextArchived,
@@ -443,6 +467,7 @@ export async function onRequest(context) {
           id: event.id,
           title: event.title,
           when_text: event.when_text,
+          starts_at: event.starts_at,
           location: event.location,
           description: event.description,
           archived: event.archived,

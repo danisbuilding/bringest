@@ -20,6 +20,7 @@ Live at **vibringdos.danisbuilding.cc**
 | Host gets | — | **a collated "Notes for you" block** with copy-all |
 | Colour | fixed forest green | **nine themes**, picked per event |
 | Top of the page | title block | optional **header photo** above it |
+| Host link | copy + email | **share sheet** and **calendar file** too |
 
 ## Layout
 
@@ -31,7 +32,7 @@ public/_headers            CSP and security headers
 functions/api/[[path]].js  the whole API, one onRequest handler
 functions/img/[[path]].js  serves header photos out of R2, outside /api
 schema.sql                 D1 and R2 shapes
-tests/api.test.mjs         41 integration tests
+tests/api.test.mjs         47 integration tests
 ```
 
 No framework, no bundler, no dependencies.
@@ -45,6 +46,10 @@ node --test tests/api.test.mjs
 Needs Node 22+ (`node:sqlite`). No network, no wrangler, no database — the suite
 shims D1 over in-memory SQLite and applies the real `schema.sql`, and shims R2
 over a `Map`.
+
+Rendering is checked against a server that parses `public/_headers` and applies
+it, because a plain static server ignores the CSP — which is how a CSP bug
+shipped once already.
 
 ## Header photos
 
@@ -110,6 +115,42 @@ static files only and the API silently 404s.
 Schema changes go in the D1 console one statement at a time — the console
 flattens a multi-line paste onto one line, which turns `--` comments into a
 comment that swallows the rest.
+
+## The two link blocks
+
+The host page shows the guest link and the host link in separate blocks. They
+used to share one heading that read "Share this with guests", which was wrong
+about half of what sat under it: the host link must not be shared.
+
+The guest block offers Copy and Share. The host block offers Email, Share and a
+calendar file, under the warning that there is no password and no recovery.
+
+`navigator.share` is missing in Firefox and some desktop browsers, so the Share
+buttons are **absent** there rather than disabled — a button that can never work
+is worse than one that was never offered. Below 360px the three host buttons
+would need ~330px of content against the 250px an iPhone SE gives, so the third
+drops to its own full-width row.
+
+## Calendar files
+
+`events.starts_at` is an optional floating local `YYYY-MM-DDTHH:MM`, or a bare
+`YYYY-MM-DD` for an all-day entry. No zone and no offset: the gathering is at
+3pm where it is, and pinning a zone would shift it for anyone adding it from
+elsewhere. A date without a time becomes all-day rather than a guessed hour.
+
+It does not replace `when_text`, which stays the line guests read. It exists
+only so an `.ics` file can be built, and the Calendar button is absent until a
+date is set.
+
+The file is generated in the browser to RFC 5545, folded at 75 octets — without
+that the host link pushes DESCRIPTION over the limit and Outlook and Apple
+Calendar reject the file outright. The host link goes in the description with a
+warning not to invite guests to the entry, since the calendar entry carries a
+secret.
+
+Validation is whole-value, not truncating: `startsAt` rejects anything over 16
+characters rather than slicing it, so a malformed `2026-11-28T15:00:00` is
+refused instead of being quietly trimmed into something valid.
 
 ## Deployment record
 

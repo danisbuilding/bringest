@@ -547,3 +547,62 @@ test("uploads fail cleanly when no bucket is bound", async () => {
   });
   assert.equal(res.status, 503);
 });
+
+/* ---- event start time ------------------------------------------------- */
+
+test("a start time round-trips and reaches the guest page", async () => {
+  const call = client();
+  const { key } = await seeded(call);
+  const made = await call("POST", `hosts/${key}/events`, {
+    title: "Friendsgiving", when_text: "Saturday, Nov 28 · 3pm", starts_at: "2026-11-28T15:00",
+  });
+  assert.equal(made.body.event.starts_at, "2026-11-28T15:00");
+  const pub = await call("GET", `public/${made.body.event.slug}`);
+  assert.equal(pub.body.event.starts_at, "2026-11-28T15:00");
+  // The free-text line is untouched: it is still what guests read.
+  assert.equal(pub.body.event.when_text, "Saturday, Nov 28 · 3pm");
+});
+
+test("a date with no time is kept, for an all-day entry", async () => {
+  const call = client();
+  const { key } = await seeded(call);
+  const made = await call("POST", `hosts/${key}/events`, { title: "A", starts_at: "2026-11-28" });
+  assert.equal(made.body.event.starts_at, "2026-11-28");
+});
+
+test("a start time is optional and absent by default", async () => {
+  const call = client();
+  const { key } = await seeded(call);
+  const made = await call("POST", `hosts/${key}/events`, { title: "A" });
+  assert.equal(made.body.event.starts_at, null);
+});
+
+test("nonsense in starts_at is dropped rather than stored", async () => {
+  const call = client();
+  const { key } = await seeded(call);
+  for (const bad of [
+    "next tuesday", "2026-13-01", "2026-02-30", "2026-11-28T25:00", "2026-11-28T15:00:00",
+    "2026-11-28T15:00Z", "28/11/2026", "<script>", "2026-11-28T15", "",
+  ]) {
+    const made = await call("POST", `hosts/${key}/events`, { title: "A", starts_at: bad });
+    assert.equal(made.body.event.starts_at, null, `should have rejected ${JSON.stringify(bad)}`);
+  }
+});
+
+test("a start time can be changed and cleared", async () => {
+  const call = client();
+  const { key, event } = await seeded(call);
+  let r = await call("PATCH", `events/${event.id}?key=${key}`, { starts_at: "2026-12-24T19:30" });
+  assert.equal(r.body.event.starts_at, "2026-12-24T19:30");
+  r = await call("PATCH", `events/${event.id}?key=${key}`, { starts_at: "" });
+  assert.equal(r.body.event.starts_at, null);
+});
+
+test("editing other fields leaves the start time alone", async () => {
+  const call = client();
+  const { key, event } = await seeded(call);
+  await call("PATCH", `events/${event.id}?key=${key}`, { starts_at: "2026-12-24T19:30" });
+  const r = await call("PATCH", `events/${event.id}?key=${key}`, { title: "Renamed" });
+  assert.equal(r.body.event.title, "Renamed");
+  assert.equal(r.body.event.starts_at, "2026-12-24T19:30");
+});
