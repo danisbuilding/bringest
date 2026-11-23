@@ -486,7 +486,7 @@ function renderLanding() {
 /* ---------- host dashboard ---------- */
 async function renderDashboard(key) {
   applyTheme("forest");
-  app.innerHTML = `<p class="muted">Loading your gatherings…</p>`;
+  app.innerHTML = `<p class="muted">Loading your events…</p>`;
   let data;
   try {
     data = await api("hosts/" + key);
@@ -508,7 +508,7 @@ async function renderDashboard(key) {
 
   app.innerHTML = `
     <div class="bar-top">
-      <h1>Your gatherings</h1>
+      <h1>Your events</h1>
       <button class="btn small" id="new">New Event +</button>
     </div>
     <div class="share">
@@ -521,13 +521,13 @@ async function renderDashboard(key) {
     </div>
     ${active.length ? active.map(card).join("") : `<div class="empty">Nothing planned yet. Make your first list.</div>`}
     ${archived.length ? `<div class="grp">Archived</div>${archived.map(card).join("")}` : ""}
-    <p class="tiny muted" style="margin-top:1.5rem">${active.length} of 25 active gatherings.</p>
+    <p class="tiny muted" style="margin-top:1.5rem">${active.length} of 25 active events.</p>
     ${markFooter()}`;
 
   document.getElementById("copykey").addEventListener("click", () => copy(location.origin + BASE + "/h/" + key, "Host link copied"));
   document.getElementById("emailkey").addEventListener("click", () =>
     mailLink(
-      `Your private Bringest host link — this is how you get back to your gatherings. ` +
+      `Your private Bringest host link — this is how you get back to your events. ` +
       `Keep it to yourself; anyone with it can edit your lists.\n\n` +
       `${location.origin}${BASE}/h/${key}\n`
     ));
@@ -580,7 +580,7 @@ function wireThemePicker(m) {
 
 function newEventSheet(key) {
   openSheet(`
-    <h2>New gathering</h2>
+    <h2>New event</h2>
     <div class="field"><label for="t">What is it?</label><input id="t" placeholder="Sunday potluck"></div>
     <div class="field"><label for="w">When</label><input id="w" placeholder="Sunday, 2pm"></div>
     ${dateField({})}
@@ -589,7 +589,7 @@ function newEventSheet(key) {
     ${imageField({})}
     ${themePicker("forest")}
     <div class="row-btns" style="margin-top:1rem">
-      <button class="btn" id="save">Create gathering</button>
+      <button class="btn" id="save">Create event</button>
       <button class="btn quiet" data-close>Cancel</button>
     </div>`, (m) => {
     wireThemePicker(m);
@@ -610,12 +610,12 @@ function newEventSheet(key) {
           },
         });
         // The image hangs off an event id, so it can only go up once the
-        // gathering exists. A photo failure must not discard the gathering.
+        // event exists. A photo failure must not discard the event.
         if (blob) {
           try {
             await putBanner(event.id, key, blob);
           } catch (err) {
-            toast("Gathering created, but the photo didn't upload: " + err.message);
+            toast("Event created, but the photo didn't upload: " + err.message);
           }
         }
         closeSheet();
@@ -647,7 +647,7 @@ async function renderEditor(key, eventId) {
     state = { key, event: data.event, items: data.items };
   } catch (err) {
     app.innerHTML = `<div class="stack"><h1>Not found</h1><p class="muted">${esc(err.message)}</p>
-      <a class="btn ghost" href="${BASE}/h/${esc(key)}">Back to your gatherings</a></div>`;
+      <a class="btn ghost" href="${BASE}/h/${esc(key)}">Back to your events</a></div>`;
     return;
   }
   paintEditor();
@@ -661,7 +661,7 @@ function paintEditor() {
 
   app.innerHTML = `
     <div class="bar-top">
-      <a class="tiny" href="${BASE}/h/${key}">← All gatherings</a>
+      <a class="tiny" href="${BASE}/h/${key}">← All events</a>
       <button class="btn small quiet" id="edit-event">Edit details</button>
     </div>
     ${bannerBlock(event)}
@@ -748,7 +748,7 @@ function hostRow(item) {
 function eventSheet() {
   const { key, event } = state;
   openSheet(`
-    <h2>Gathering details</h2>
+    <h2>Event details</h2>
     <div class="field"><label for="t">What is it?</label><input id="t" value="${esc(event.title)}"></div>
     <div class="field"><label for="w">When</label><input id="w" value="${esc(event.when_text || "")}"></div>
     ${dateField(event)}
@@ -900,7 +900,7 @@ async function shareLink(title, text, url) {
   }
 }
 
-// RFC 5545. Times are floating — no TZID, no trailing Z — because the gathering
+// RFC 5545. Times are floating — no TZID, no trailing Z — because the event
 // is at 3pm where it is, and pinning a zone would shift it for anyone adding it
 // from elsewhere. A date with no time becomes an all-day entry rather than a
 // guessed hour.
@@ -935,7 +935,7 @@ function buildIcs(event, hostUrl) {
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Bringest//Gathering//EN",
+    "PRODID:-//Bringest//Event//EN",
     "CALSCALE:GREGORIAN",
     "BEGIN:VEVENT",
     `UID:${event.id}@bringest`,
@@ -964,7 +964,7 @@ function downloadIcs(event, hostUrl) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = ((event.title || "gathering").replace(/[^\w ]+/g, "").trim().slice(0, 40) || "gathering") + ".ics";
+  a.download = ((event.title || "event").replace(/[^\w ]+/g, "").trim().slice(0, 40) || "event") + ".ics";
   document.body.appendChild(a);
   a.click();
   a.remove();
@@ -1020,7 +1020,7 @@ function shareBlocks(event, guestUrl) {
     <div class="hostbox">
       <strong class="tiny">Your host link &mdash; keep it private</strong>
       <p class="why">There is no password. Anyone with this link can edit your list,
-        and losing it loses the gathering.</p>
+        and losing it loses the event.</p>
       <div class="${cols}">${host.join("")}</div>
     </div>`;
 }
@@ -1038,7 +1038,7 @@ function wireShareBlocks(event, key, guestUrl) {
 
   on("emailme", () =>
     mailLink(
-      `Your private Bringest host link — this is how you get back to your gatherings. ` +
+      `Your private Bringest host link — this is how you get back to your events. ` +
       `Keep it to yourself; anyone with it can edit your lists.\n\n` +
       `${hostUrl}\n\n` +
       `Guest link for "${event.title}" — this one is safe to share:\n\n` +
@@ -1160,7 +1160,7 @@ const bannerSrc = (event) =>
     ? BASE + event.header_image
     : null;
 
-// Decorative: the title says what the gathering is, and a host-picked photo has
+// Decorative: the title says what the event is, and a host-picked photo has
 // no text alternative to offer.
 function bannerBlock(event) {
   const src = bannerSrc(event);

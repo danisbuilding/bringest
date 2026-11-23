@@ -53,7 +53,7 @@ shipped once already.
 
 ## Header photos
 
-Optional, one per gathering, and absent from the DOM entirely when unset — the
+Optional, one per event, and absent from the DOM entirely when unset — the
 page then starts with the title exactly as it did before.
 
 The editor normalises every photo to **1200x600 JPEG** on a canvas before it
@@ -69,7 +69,7 @@ requires the host key. Uploads count against the host write throttle.
 
 Objects live in R2 under the same string the `events.header_image` column
 stores, minus the leading slash. Replacing a photo deletes the object it
-replaced; deleting a gathering deletes its object. Keys carry a random token, so
+replaced; deleting an event deletes its object. Keys carry a random token, so
 any stored image is immutable and `/img/` serves it with a year-long immutable
 cache. `/img/` is a separate Function precisely so that the `Cache-Control:
 no-store` rule `_headers` puts on `/api/*` does not reach it.
@@ -134,7 +134,7 @@ drops to its own full-width row.
 ## Calendar files
 
 `events.starts_at` is an optional floating local `YYYY-MM-DDTHH:MM`, or a bare
-`YYYY-MM-DD` for an all-day entry. No zone and no offset: the gathering is at
+`YYYY-MM-DD` for an all-day entry. No zone and no offset: the event is at
 3pm where it is, and pinning a zone would shift it for anyone adding it from
 elsewhere. A date without a time becomes all-day rather than a guessed hour.
 

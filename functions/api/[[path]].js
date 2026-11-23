@@ -51,7 +51,7 @@ function serves(value) {
 }
 
 // A floating local date-time, "YYYY-MM-DDTHH:MM", with no zone and no offset:
-// 3pm means 3pm where the gathering is, and a stored offset would be wrong the
+// 3pm means 3pm where the event is, and a stored offset would be wrong the
 // moment a guest in another zone read it. Optional — when_text stays the thing
 // guests actually see, and this exists so a calendar file can be generated.
 function startsAt(value) {
@@ -175,7 +175,7 @@ async function loadItems(db, eventId, audience = "host") {
 }
 
 /* ---------- retention ----------
-   A gathering is deleted after three years with no activity. Pages has no cron,
+   An event is deleted after three years with no activity. Pages has no cron,
    so the sweep rides on ordinary writes; at a three-year horizon it does not
    matter that it only runs while someone is using the app. It is bounded per
    run and executed after the response via waitUntil, so it can never make a
@@ -184,7 +184,7 @@ const RETAIN_MS = 3 * 365.25 * 24 * 60 * 60 * 1000;
 const SWEEP_ODDS = 0.004;       // ~1 write in 250
 const SWEEP_BATCH = 10;
 
-// Which gathering a write affects. Resolved BEFORE the route runs, because a
+// Which event a write affects. Resolved BEFORE the route runs, because a
 // delete removes the very row this lookup needs.
 async function eventIdFor(db, segs) {
   if (!segs[1]) return null;
@@ -222,7 +222,7 @@ export async function sweepExpired(db, env) {
     await db.prepare("DELETE FROM events WHERE id = ?").bind(e.id).run();
   }
 
-  // A host row whose gatherings have all gone is unreachable: its key opens an
+  // A host row whose events have all gone is unreachable: its key opens an
   // empty dashboard and nothing points at it.
   await db
     .prepare(
@@ -357,7 +357,7 @@ async function handle(context) {
           id,
           host.id,
           token(12),
-          clean(body.title, 120) || "Untitled gathering",
+          clean(body.title, 120) || "Untitled event",
           clean(body.when_text, 120),
           startsAt(body.starts_at),
           clean(body.location, 200),
@@ -369,7 +369,7 @@ async function handle(context) {
         )
         .run();
       if (!wrote(created))
-        return fail(409, `You have ${MAX_ACTIVE_EVENTS} active gatherings. Archive one to add another.`);
+        return fail(409, `You have ${MAX_ACTIVE_EVENTS} active events. Archive one to add another.`);
       const event = await db.prepare("SELECT * FROM events WHERE id = ?").bind(id).first();
       return json({ event });
     }
@@ -377,7 +377,7 @@ async function handle(context) {
     // ---- events (host) --------------------------------------------------
     if (segs[0] === "events" && segs.length === 2) {
       const owned = await ownedEvent(db, segs[1], key);
-      if (!owned) return fail(404, "Gathering not found.");
+      if (!owned) return fail(404, "Event not found.");
 
       if (method === "GET") {
         return json({ event: owned.event, items: await loadItems(db, owned.event.id) });
@@ -410,13 +410,13 @@ async function handle(context) {
           )
           .run();
         if (!wrote(updated))
-          return fail(409, `That would put you over ${MAX_ACTIVE_EVENTS} active gatherings. Archive another one first.`);
+          return fail(409, `That would put you over ${MAX_ACTIVE_EVENTS} active events. Archive another one first.`);
         const event = await db.prepare("SELECT * FROM events WHERE id = ?").bind(e.id).first();
         return json({ event });
       }
 
       if (method === "DELETE") {
-        // Drop the stored image too, or deleting the gathering orphans it in
+        // Drop the stored image too, or deleting the event orphans it in
         // the bucket with nothing left pointing at it.
         if (owned.event.header_image && env.IMG) {
           try { await env.IMG.delete(objectKeyFor(owned.event.header_image)); } catch {}
@@ -431,7 +431,7 @@ async function handle(context) {
     // ---- header image ---------------------------------------------------
     if (segs[0] === "events" && segs[2] === "image" && segs.length === 3) {
       const owned = await ownedEvent(db, segs[1], key);
-      if (!owned) return fail(404, "Gathering not found.");
+      if (!owned) return fail(404, "Event not found.");
       if (!env.IMG) return fail(503, "Image storage isn't set up on this deployment yet.");
       const e = owned.event;
 
@@ -465,7 +465,7 @@ async function handle(context) {
     // ---- items ----------------------------------------------------------
     if (segs[0] === "events" && segs[2] === "items" && method === "POST") {
       const owned = await ownedEvent(db, segs[1], key);
-      if (!owned) return fail(404, "Gathering not found.");
+      if (!owned) return fail(404, "Event not found.");
       const incoming = Array.isArray(body.items) ? body.items : [body];
       const maxOrder = await db
         .prepare("SELECT COALESCE(MAX(sort_order), 0) AS m FROM items WHERE event_id = ?")
@@ -549,7 +549,7 @@ async function handle(context) {
     // ---- guest view -----------------------------------------------------
     if (segs[0] === "public" && segs.length === 2 && method === "GET") {
       const event = await db.prepare("SELECT * FROM events WHERE slug = ?").bind(segs[1]).first();
-      if (!event) return fail(404, "This link doesn't point to a gathering.");
+      if (!event) return fail(404, "This link doesn't point to an event.");
       return json({
         event: {
           id: event.id,

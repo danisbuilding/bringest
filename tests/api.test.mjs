@@ -104,7 +104,7 @@ async function seeded(call, qty_needed = 2) {
 
 /* ---- tests ------------------------------------------------------------ */
 
-test("host can create a gathering, add items, and guests see them by slug", async () => {
+test("host can create an event, add items, and guests see them by slug", async () => {
   const call = client();
   const { event, item } = await seeded(call);
   assert.equal(item.name, "Bread");
@@ -147,7 +147,7 @@ test("editing a claim cannot exceed what is left, excluding the claim itself", a
   assert.equal(good.status, 200);
 });
 
-test("a wrong host key cannot read or edit someone else's gathering", async () => {
+test("a wrong host key cannot read or edit someone else's event", async () => {
   const call = client();
   const { event } = await seeded(call);
   const bogus = "z".repeat(32);
@@ -194,7 +194,7 @@ test("the item cap is enforced on batch insert", async () => {
   assert.match(res.body.error, /100/);
 });
 
-test("the active gathering cap is enforced", async () => {
+test("the active event cap is enforced", async () => {
   const call = client();
   const { body: h } = await call("POST", "hosts", {});
   const key = h.host_key;
@@ -444,7 +444,7 @@ test("a header image uploads, reaches the guest page, and serves cacheably", asy
   assert.match(served.cache, /immutable/);
 });
 
-test("a gathering with no image reports none, and the guest page says so", async () => {
+test("an event with no image reports none, and the guest page says so", async () => {
   const call = client();
   const { event } = await seeded(call);
   const pub = await call("GET", `public/${event.slug}`);
@@ -498,7 +498,7 @@ test("removing the image clears the column and the object", async () => {
   assert.equal(pub.body.event.header_image, null);
 });
 
-test("deleting a gathering does not orphan its image", async () => {
+test("deleting an event does not orphan its image", async () => {
   const call = client();
   const { key, event } = await seeded(call);
   await call.bytes(`events/${event.id}/image?key=${key}`, JPEG());
@@ -617,7 +617,7 @@ const age = (call, eventId, iso) =>
 const stamp = (call, eventId) =>
   call.db.prepare("SELECT updated_at FROM events WHERE id = ?").bind(eventId).first();
 
-test("a successful write marks the gathering as active", async () => {
+test("a successful write marks the event as active", async () => {
   const call = client();
   const { key, event } = await seeded(call);
   await age(call, event.id, "2020-01-01T00:00:00.000Z");
@@ -626,7 +626,7 @@ test("a successful write marks the gathering as active", async () => {
   assert.ok(row.updated_at > "2024-01-01", `expected a fresh stamp, got ${row.updated_at}`);
 });
 
-test("activity on an item or a claim counts for its gathering", async () => {
+test("activity on an item or a claim counts for its event", async () => {
   const call = client();
   const { key, event, item } = await seeded(call);
   for (const [label, run] of [
@@ -661,7 +661,7 @@ test("a rejected write does not extend the clock", async () => {
   assert.equal(row.updated_at, "2020-01-01T00:00:00.000Z");
 });
 
-test("the sweep deletes a gathering untouched for three years, and all of it", async () => {
+test("the sweep deletes an event untouched for three years, and all of it", async () => {
   const call = client();
   const { key, event, item } = await seeded(call);
   await call("POST", `items/${item.id}/claims`, { guest_name: "Ana" });
@@ -692,7 +692,7 @@ test("the sweep leaves anything still inside the window alone", async () => {
   assert.equal(row.n, 1);
 });
 
-test("a gathering with no updated_at falls back to when it was created", async () => {
+test("an event with no updated_at falls back to when it was created", async () => {
   const call = client();
   const { event } = await seeded(call);
   await call.db.prepare("UPDATE events SET updated_at = NULL, created_at = ? WHERE id = ?")
@@ -710,7 +710,7 @@ test("the sweep clears host rows left with nothing", async () => {
   assert.equal(row.n, 0);
 });
 
-test("a recent host with no gatherings yet is not swept", async () => {
+test("a recent host with no events yet is not swept", async () => {
   const call = client();
   const { body } = await call("POST", "hosts", {});
   await sweepExpired(call.db, call.env);
