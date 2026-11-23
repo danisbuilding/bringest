@@ -304,11 +304,13 @@ label .sub{font-weight:400}
 /* Prose on the landing page. Left-aligned even where the wordmark above it is
    centred: centred paragraphs are hard to read once they wrap, which on a phone
    they always do. */
-.pitch,.closer{font-size:.97rem;line-height:1.55;color:var(--note);text-align:left;
-  max-width:30rem;margin-left:auto;margin-right:auto}
+/* No max-width here. The .wrap above already caps the column at 34rem, so a
+   second, narrower cap only centred these inside their own siblings and left
+   them indented against the wordmark on any screen wider than 30rem. */
+.pitch,.closer{font-size:.97rem;line-height:1.55;color:var(--note);text-align:left}
 .pitch{margin-bottom:.4rem}
-.steps{counter-reset:step;list-style:none;padding:0;margin:1.5rem auto .2rem;
-  text-align:left;max-width:30rem}
+.steps{counter-reset:step;list-style:none;padding:0;margin:1.5rem 0 .2rem;
+  text-align:left}
 .steps li{counter-increment:step;position:relative;padding-left:2.4rem;margin-bottom:.85rem;
   font-size:.95rem;line-height:1.5;color:var(--ink)}
 .steps li:last-child{margin-bottom:0}
@@ -492,7 +494,7 @@ function renderLanding() {
   <path d="M28 20.5c-2.6-.6-4.5.4-5.6 2.2"/>
 </svg><span>Bringest</span></h1>
       <p class="slogan">Bring things. Together.</p>
-      <p class="pitch">Bringest helps people sign up to bring items for collective meals.</p>
+      <p class="pitch">Bringest helps people sign up to bring dishes for collective meals.</p>
       <button class="btn" id="start">Start here</button>
       <ol class="steps">
         <li>Click <b>&ldquo;Start here&rdquo;</b> to open your hosting page.
@@ -1549,7 +1551,8 @@ const LEGAL_FOOTER = `
   <p class="legal">
     <a href="${BASE}/privacy">Privacy</a><span>&middot;</span>
     <a href="${BASE}/terms">Terms</a><span>&middot;</span>
-    <a href="${BASE}/cookies">Cookies</a>
+    <a href="${BASE}/cookies">Cookies</a><span>&middot;</span>
+    <a href="mailto:support@dib.works">Contact</a>
   </p>`;
 
 function markFooter() {

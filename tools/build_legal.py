@@ -169,10 +169,12 @@ tr:last-child td{{border-bottom:0}}
 </html>
 """
 
+CONTACT = ("mailto:support@dib.works", "Contact")
+
 NAV = {
-    "privacy.html": [("/terms", "Terms of Service"), ("/cookies", "Cookie Statement")],
-    "terms.html": [("/privacy", "Privacy Policy"), ("/cookies", "Cookie Statement")],
-    "cookies.html": [("/privacy", "Privacy Policy"), ("/terms", "Terms of Service")],
+    "privacy.html": [("/terms", "Terms of Service"), ("/cookies", "Cookie Statement"), CONTACT],
+    "terms.html": [("/privacy", "Privacy Policy"), ("/cookies", "Cookie Statement"), CONTACT],
+    "cookies.html": [("/privacy", "Privacy Policy"), ("/terms", "Terms of Service"), CONTACT],
 }
 
 
