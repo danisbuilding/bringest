@@ -7,7 +7,7 @@ leave a note.
 **No accounts, no sign-in, no email address, no app to install.** A host is
 identified by holding a secret link, and a guest by nothing at all.
 
-Live at **bringest.app**
+Live at **bringest.com**
 
 The history before the rename belongs to two earlier private builds this grew
 out of; Bringest is the one that is maintained.
@@ -167,7 +167,7 @@ refused instead of being quietly trimmed into something valid.
 | Build command | none |
 | D1 database | `bringest`, bound as `DB` |
 | R2 bucket | `bringest-images`, bound as `IMG` |
-| Domains | `bringest.app`, `bringest.pages.dev` |
+| Domains | `bringest.com`, `bringest.pages.dev` |
 | Analytics | Cloudflare Web Analytics, enabled on the Pages project |
 
 The CSP already allows the analytics beacon, and `Referrer-Policy` is
