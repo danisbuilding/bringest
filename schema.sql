@@ -16,6 +16,10 @@ CREATE TABLE IF NOT EXISTS events (
   location    TEXT,
   description TEXT,
   archived    INTEGER NOT NULL DEFAULT 0,
+  -- Last write to this gathering or anything in it. Drives the three-year
+  -- retention sweep. NULL on rows predating the column; the sweep falls back to
+  -- created_at, so a backfill is not required for correctness.
+  updated_at  TEXT,
   -- Optional floating local start, "YYYY-MM-DDTHH:MM", no zone. Only used to
   -- build a calendar file; when_text remains what guests read.
   starts_at   TEXT,

@@ -1,10 +1,17 @@
 /*
-  Referrer-Policy: no-referrer
+  # same-origin, not no-referrer: a host link must never leak to a third party
+  # in a Referer, but Cloudflare's analytics beacon is rejected outright when no
+  # Referer is sent at all. same-origin satisfies both.
+  Referrer-Policy: same-origin
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
   Cross-Origin-Opener-Policy: same-origin
   Permissions-Policy: geolocation=(), camera=(), microphone=(), interest-cohort=()
-  Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' data: blob:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+  # static.cloudflareinsights.com serves the Web Analytics beacon; it posts to
+  # /cdn-cgi/rum on this domain ('self'), with cloudflareinsights.com as the
+  # fallback target when the beacon is embedded rather than auto-injected.
+  # Without both, the beacon is blocked and the dashboard silently reads zero.
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' https://cloudflareinsights.com; img-src 'self' data: blob:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
 
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable

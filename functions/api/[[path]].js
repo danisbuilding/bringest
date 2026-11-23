@@ -174,7 +174,95 @@ async function loadItems(db, eventId, audience = "host") {
   return items.map((i) => ({ ...i, claims: byItem.get(i.id) || [] }));
 }
 
+/* ---------- retention ----------
+   A gathering is deleted after three years with no activity. Pages has no cron,
+   so the sweep rides on ordinary writes; at a three-year horizon it does not
+   matter that it only runs while someone is using the app. It is bounded per
+   run and executed after the response via waitUntil, so it can never make a
+   request slower. */
+const RETAIN_MS = 3 * 365.25 * 24 * 60 * 60 * 1000;
+const SWEEP_ODDS = 0.004;       // ~1 write in 250
+const SWEEP_BATCH = 10;
+
+// Which gathering a write affects. Resolved BEFORE the route runs, because a
+// delete removes the very row this lookup needs.
+async function eventIdFor(db, segs) {
+  if (!segs[1]) return null;
+  if (segs[0] === "events") return segs[1];
+  if (segs[0] === "items") {
+    const row = await db.prepare("SELECT event_id FROM items WHERE id = ?").bind(segs[1]).first();
+    return row ? row.event_id : null;
+  }
+  if (segs[0] === "claims") {
+    const row = await db
+      .prepare("SELECT event_id FROM items WHERE id = (SELECT item_id FROM claims WHERE id = ?)")
+      .bind(segs[1])
+      .first();
+    return row ? row.event_id : null;
+  }
+  return null;
+}
+
+// Exported so the tests can run it directly rather than waiting on a dice roll.
+export async function sweepExpired(db, env) {
+  const cutoff = new Date(Date.now() - RETAIN_MS).toISOString();
+  const { results } = await db
+    .prepare(
+      "SELECT id, header_image FROM events WHERE COALESCE(updated_at, created_at) < ? LIMIT ?"
+    )
+    .bind(cutoff, SWEEP_BATCH)
+    .all();
+
+  for (const e of results || []) {
+    if (e.header_image && env.IMG) {
+      try { await env.IMG.delete(objectKeyFor(e.header_image)); } catch {}
+    }
+    await db.prepare("DELETE FROM claims WHERE item_id IN (SELECT id FROM items WHERE event_id = ?)").bind(e.id).run();
+    await db.prepare("DELETE FROM items WHERE event_id = ?").bind(e.id).run();
+    await db.prepare("DELETE FROM events WHERE id = ?").bind(e.id).run();
+  }
+
+  // A host row whose gatherings have all gone is unreachable: its key opens an
+  // empty dashboard and nothing points at it.
+  await db
+    .prepare(
+      "DELETE FROM hosts WHERE created_at < ? AND id NOT IN (SELECT host_id FROM events)"
+    )
+    .bind(cutoff)
+    .run();
+
+  return (results || []).length;
+}
+
 export async function onRequest(context) {
+  const { request, env, params } = context;
+  const segs = (params.path || []).filter(Boolean);
+  const write = request.method !== "GET";
+
+  // Resolved before the route, used after it: a successful delete would leave
+  // nothing to resolve from.
+  const touchId = write && env.DB ? await eventIdFor(env.DB, segs).catch(() => null) : null;
+
+  const res = await handle(context);
+
+  // Only a write that actually succeeded counts as activity, so a rejected or
+  // throttled request can't extend anyone's retention clock.
+  if (write && env.DB && res.status < 400) {
+    const after = (async () => {
+      if (touchId) {
+        await env.DB.prepare("UPDATE events SET updated_at = ? WHERE id = ?")
+          .bind(now(), touchId)
+          .run();
+      }
+      if (Math.random() < SWEEP_ODDS) await sweepExpired(env.DB, env);
+    })().catch(() => {});
+    if (context.waitUntil) context.waitUntil(after); else await after;
+  }
+
+  return res;
+}
+
+async function handle(context) {
   const { request, env, params } = context;
   const db = env.DB;
   const segs = (params.path || []).filter(Boolean);

@@ -4,7 +4,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { DatabaseSync } from "node:sqlite";
 import { readFileSync } from "node:fs";
-import { onRequest } from "../functions/api/[[path]].js";
+import { onRequest, sweepExpired } from "../functions/api/[[path]].js";
 import { onRequest as onImage } from "../functions/img/[[path]].js";
 
 const SCHEMA = readFileSync(new URL("../schema.sql", import.meta.url), "utf8");
@@ -89,6 +89,8 @@ function client() {
   };
 
   call.bucket = IMG;
+  call.db = DB;
+  call.env = { DB, IMG };
   return call;
 }
 
@@ -605,4 +607,114 @@ test("editing other fields leaves the start time alone", async () => {
   const r = await call("PATCH", `events/${event.id}?key=${key}`, { title: "Renamed" });
   assert.equal(r.body.event.title, "Renamed");
   assert.equal(r.body.event.starts_at, "2026-12-24T19:30");
+});
+
+/* ---- retention --------------------------------------------------------- */
+
+const age = (call, eventId, iso) =>
+  call.db.prepare("UPDATE events SET updated_at = ? WHERE id = ?").bind(iso, eventId).run();
+
+const stamp = (call, eventId) =>
+  call.db.prepare("SELECT updated_at FROM events WHERE id = ?").bind(eventId).first();
+
+test("a successful write marks the gathering as active", async () => {
+  const call = client();
+  const { key, event } = await seeded(call);
+  await age(call, event.id, "2020-01-01T00:00:00.000Z");
+  await call("POST", `events/${event.id}/items?key=${key}`, { items: [{ name: "Bread" }] });
+  const row = await stamp(call, event.id);
+  assert.ok(row.updated_at > "2024-01-01", `expected a fresh stamp, got ${row.updated_at}`);
+});
+
+test("activity on an item or a claim counts for its gathering", async () => {
+  const call = client();
+  const { key, event, item } = await seeded(call);
+  for (const [label, run] of [
+    ["claim", () => call("POST", `items/${item.id}/claims`, { guest_name: "Ana" })],
+    ["item edit", () => call("PATCH", `items/${item.id}?key=${key}`, { name: "Rolls" })],
+  ]) {
+    await age(call, event.id, "2020-01-01T00:00:00.000Z");
+    await run();
+    const row = await stamp(call, event.id);
+    assert.ok(row.updated_at > "2024-01-01", `${label} should have counted as activity`);
+  }
+});
+
+test("deleting something still counts, though the row is gone by then", async () => {
+  const call = client();
+  const { items, event, item } = await seeded(call);
+  const made = await call("POST", `items/${item.id}/claims`, { guest_name: "Ana" });
+  const claimId = made.body.items[0].claims[0].id;
+  await age(call, event.id, "2020-01-01T00:00:00.000Z");
+  await call("DELETE", `claims/${claimId}`);
+  const row = await stamp(call, event.id);
+  assert.ok(row.updated_at > "2024-01-01", "a delete is activity too");
+});
+
+test("a rejected write does not extend the clock", async () => {
+  const call = client();
+  const { event } = await seeded(call);
+  await age(call, event.id, "2020-01-01T00:00:00.000Z");
+  const bad = await call("PATCH", `events/${event.id}?key=${"z".repeat(32)}`, { title: "No" });
+  assert.equal(bad.status, 404);
+  const row = await stamp(call, event.id);
+  assert.equal(row.updated_at, "2020-01-01T00:00:00.000Z");
+});
+
+test("the sweep deletes a gathering untouched for three years, and all of it", async () => {
+  const call = client();
+  const { key, event, item } = await seeded(call);
+  await call("POST", `items/${item.id}/claims`, { guest_name: "Ana" });
+  await call.bytes(`events/${event.id}/image?key=${key}`, JPEG());
+  assert.equal(call.bucket.store.size, 1);
+
+  await age(call, event.id, "2019-01-01T00:00:00.000Z");
+  assert.equal(await sweepExpired(call.db, call.env), 1);
+
+  for (const [table, sql] of [
+    ["events", "SELECT COUNT(*) AS n FROM events WHERE id = ?"],
+    ["items", "SELECT COUNT(*) AS n FROM items WHERE event_id = ?"],
+    ["claims", "SELECT COUNT(*) AS n FROM claims WHERE item_id IN (SELECT id FROM items WHERE event_id = ?)"],
+  ]) {
+    const row = await call.db.prepare(sql).bind(event.id).first();
+    assert.equal(row.n, 0, `${table} should have been cleared`);
+  }
+  assert.equal(call.bucket.store.size, 0, "the header photo must go with it");
+});
+
+test("the sweep leaves anything still inside the window alone", async () => {
+  const call = client();
+  const { event } = await seeded(call);
+  // One day short of the cutoff.
+  await age(call, event.id, new Date(Date.now() - (3 * 365.25 - 1) * 86400000).toISOString());
+  assert.equal(await sweepExpired(call.db, call.env), 0);
+  const row = await call.db.prepare("SELECT COUNT(*) AS n FROM events WHERE id = ?").bind(event.id).first();
+  assert.equal(row.n, 1);
+});
+
+test("a gathering with no updated_at falls back to when it was created", async () => {
+  const call = client();
+  const { event } = await seeded(call);
+  await call.db.prepare("UPDATE events SET updated_at = NULL, created_at = ? WHERE id = ?")
+    .bind("2019-01-01T00:00:00.000Z", event.id).run();
+  assert.equal(await sweepExpired(call.db, call.env), 1);
+});
+
+test("the sweep clears host rows left with nothing", async () => {
+  const call = client();
+  const { key, event } = await seeded(call);
+  await age(call, event.id, "2019-01-01T00:00:00.000Z");
+  await call.db.prepare("UPDATE hosts SET created_at = '2019-01-01T00:00:00.000Z'").run();
+  await sweepExpired(call.db, call.env);
+  const row = await call.db.prepare("SELECT COUNT(*) AS n FROM hosts WHERE host_key = ?").bind(key).first();
+  assert.equal(row.n, 0);
+});
+
+test("a recent host with no gatherings yet is not swept", async () => {
+  const call = client();
+  const { body } = await call("POST", "hosts", {});
+  await sweepExpired(call.db, call.env);
+  const row = await call.db.prepare("SELECT COUNT(*) AS n FROM hosts WHERE host_key = ?")
+    .bind(body.host_key).first();
+  assert.equal(row.n, 1, "someone who just minted a key must keep it");
 });
