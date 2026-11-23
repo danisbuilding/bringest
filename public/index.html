@@ -206,7 +206,7 @@ h2{font-size:1.15rem;font-weight:700;margin:0;font-variation-settings:'CASL' 0.6
   text-decoration:none;color:inherit}
 .card.archived{background:var(--wash);border-color:var(--edge);box-shadow:none}
 .share{background:#fff;border:2.5px solid var(--ink);border-radius:12px;padding:.8rem .9rem;margin-bottom:1.1rem}
-.share code{display:block;word-break:break-all;font-size:.8rem;margin:.35rem 0 .6rem;
+.share code,.hostbox code{display:block;word-break:break-all;font-size:.8rem;margin:.35rem 0 .6rem;
   font-variation-settings:'CASL' 0.2,'MONO' 1}
 .empty{border:2.5px dashed var(--edge);border-radius:12px;padding:1.4rem;text-align:center;color:var(--note)}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:1.25rem;background:var(--ink);color:#fff;
@@ -298,6 +298,15 @@ label .sub{font-weight:400}
   font-variation-settings:'CASL' 0,'MONO' 1}
 .mark{display:block;text-align:center;margin-top:2rem;font-size:.75rem;font-weight:600;
   letter-spacing:.4px;color:var(--absent);font-variation-settings:'CASL' 0.5,'MONO' 0}
+/* The policy pages are plain static documents, so these are real links that
+   leave the app rather than router paths. */
+.legal{text-align:center;margin:.5rem 0 0;font-size:.75rem;color:var(--absent);
+  font-variation-settings:'CASL' 0.5,'MONO' 0;line-height:1.9}
+.mark+.legal{margin-top:.35rem}
+.legal a{color:var(--absent);text-decoration:none;border-bottom:1px solid var(--edge);
+  white-space:nowrap}
+.legal a:hover{color:var(--ink);border-bottom-color:var(--ink)}
+.legal span{margin:0 .45rem;opacity:.55}
 
 </style>
 </head>
@@ -469,6 +478,7 @@ function renderLanding() {
       </ol>
       <p class="closer">Your friends can sign up to bring different items and leave notes
         for you or the whole group if they need to.</p>
+      ${LEGAL_FOOTER}
     </div>`;
   document.getElementById("start").addEventListener("click", async (e) => {
     e.target.disabled = true;
@@ -511,12 +521,15 @@ async function renderDashboard(key) {
       <h1>Your events</h1>
       <button class="btn small" id="new">New Event +</button>
     </div>
-    <div class="share">
-      <strong class="tiny">Your private host link</strong>
+    <div class="hostbox">
+      <strong class="tiny">Your host link &mdash; keep it private</strong>
+      <p class="why">There is no password and no recovery. Anyone with this link can
+        edit your events, and losing it loses them. Save it somewhere you'll find it again.</p>
       <code>${location.origin}${BASE}/h/${esc(key)}</code>
-      <div class="row-btns">
-        <button class="btn small ghost" id="copykey">Copy host link</button>
-        <button class="btn small quiet" id="emailkey">Email it to me</button>
+      <div class="${canShare ? "grid3" : "grid2"}">
+        <button class="btn small quiet" id="copykey">${ICON.copy}Copy</button>
+        ${canShare ? `<button class="btn small quiet" id="sharekey">${ICON.share}Share</button>` : ""}
+        <button class="btn small quiet" id="emailkey">${ICON.mail}Email</button>
       </div>
     </div>
     ${active.length ? active.map(card).join("") : `<div class="empty">Nothing planned yet. Make your first list.</div>`}
@@ -531,6 +544,14 @@ async function renderDashboard(key) {
       `Keep it to yourself; anyone with it can edit your lists.\n\n` +
       `${location.origin}${BASE}/h/${key}\n`
     ));
+  if (canShare) {
+    document.getElementById("sharekey").addEventListener("click", () =>
+      shareLink(
+        "My Bringest host link",
+        "Private host link — anyone with it can edit my events.",
+        location.origin + BASE + "/h/" + key
+      ));
+  }
   document.getElementById("new").addEventListener("click", () => newEventSheet(key));
 }
 
@@ -1499,9 +1520,16 @@ function wireTempField(m) {
     }));
 }
 
+const LEGAL_FOOTER = `
+  <p class="legal">
+    <a href="${BASE}/privacy">Privacy</a><span>&middot;</span>
+    <a href="${BASE}/terms">Terms</a><span>&middot;</span>
+    <a href="${BASE}/cookies">Cookies</a>
+  </p>`;
+
 function markFooter() {
-  if (location.pathname.replace(BASE, "").replace(/\/+$/, "") === "") return "";
-  return `<span class="mark">bringest</span>`;
+  const landing = location.pathname.replace(BASE, "").replace(/\/+$/, "") === "";
+  return (landing ? "" : `<span class="mark">bringest</span>`) + LEGAL_FOOTER;
 }
 
 function render() {
