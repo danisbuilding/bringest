@@ -182,10 +182,9 @@ tr:last-child td{{border-bottom:0}}
 .foot{{
   margin-top:3rem;padding-top:1.1rem;border-top:2.5px solid var(--ink);
   font-size:.84rem;color:var(--note);
-  display:flex;flex-wrap:wrap;align-items:baseline;gap:.4rem 1.5rem;
 }}
-.foot .maker{{margin:0;font-size:.78rem;line-height:1.7;color:var(--absent)}}
-.foot .links{{margin:0 0 0 auto;text-align:right;line-height:1.9}}
+.foot .maker{{margin:.5rem 0 0;font-size:.78rem;line-height:1.7;color:var(--absent)}}
+.foot .links{{margin:0;text-align:right;line-height:1.9}}
 .foot .links a{{margin-left:1rem;white-space:nowrap}}
 
 @media (max-width:420px){{
@@ -204,10 +203,10 @@ tr:last-child td{{border-bottom:0}}
 {body}
   </main>
   <div class="foot">
-    <p class="maker">Bringest is a DIB&nbsp;Works product, operated by LVT8&nbsp;Technical&nbsp;LLC.&nbsp;&copy;&nbsp;{year}</p>
     <p class="links">
 {nav}
     </p>
+    <p class="maker">Bringest is a DIB&nbsp;Works product, operated by LVT8&nbsp;Technical&nbsp;LLC.&nbsp;&copy;&nbsp;{year}</p>
   </div>
 </div>
 <script>
