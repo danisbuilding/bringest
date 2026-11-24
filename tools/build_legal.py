@@ -206,7 +206,7 @@ tr:last-child td{{border-bottom:0}}
   <div class="foot">
 {nav}
     <p class="maker">Bringest is a <b>DIB&nbsp;Works</b> product, operated by LVT8&nbsp;Technical&nbsp;LLC.<br>
-      <a href="mailto:support@dib.works">support@dib.works</a> &middot; &copy; {year}</p>
+      &copy; {year}</p>
   </div>
 </div>
 </body>
