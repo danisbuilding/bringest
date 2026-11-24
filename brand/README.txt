@@ -3,10 +3,11 @@ Bring things. Together.
 
 The deep green is #012F19. The cream is #F3F9F8. The accent green used for
 the saying is #8FBFA0 on dark and #446C53 on light. The typeface is
-Recursive, at weight 800 for the wordmark and 600 for the saying.
+Fira Sans, at weight 800 for the wordmark and 600 for the saying — the same
+weight and tracking as the headline on bringest.com.
 
 Everything here is rendered from the same basket artwork and the same font
-file the live site uses, so nothing in this folder can drift from bringest.com.
+files the live site uses, so nothing in this folder can drift from bringest.com.
 
 
 icon-dark/     The square icon, cream basket on deep green. This is the one

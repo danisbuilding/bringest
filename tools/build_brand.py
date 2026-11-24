@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Render the brand assets from one source of truth.
 
-Everything here comes from the same basket paths and the same Recursive font
-the landing page uses, so an exported icon can't drift from the site. Run from
+Everything here comes from the same basket paths and the same Fira Sans font
+files the landing page uses, so an exported card can't drift from the site. Run from
 the repo root:  python3 tools/build_brand.py
 """
 
@@ -15,7 +15,8 @@ from playwright.sync_api import sync_playwright
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PUB = ROOT / "public"
 OUT = ROOT / "brand"
-FONT = (PUB / "fonts" / "recursive-latin.woff2").as_uri()
+FONT_800 = (PUB / "fonts" / "fira-sans-latin-800-normal.woff2").as_uri()
+FONT_600 = (PUB / "fonts" / "fira-sans-latin-600-normal.woff2").as_uri()
 
 INK_DARK, GROUND_DARK, ACCENT_DARK = "#EDF6F0", "#012F19", "#8FBFA0"
 INK_LIGHT, GROUND_LIGHT, ACCENT_LIGHT = "#012F19", "#F3F9F8", "#446C53"
@@ -51,19 +52,21 @@ def icon_svg(ink, ground, radius=0, scale=0.80):
 
 def card_html(ink, ground, accent):
     return f"""<!doctype html><html><head><meta charset="utf-8"><style>
-@font-face{{font-family:'Recursive';font-style:normal;font-weight:400 800;
-  src:url({FONT}) format('woff2');}}
+@font-face{{font-family:'Fira Sans';font-style:normal;font-weight:800;
+  src:url({FONT_800}) format('woff2');}}
+@font-face{{font-family:'Fira Sans';font-style:normal;font-weight:600;
+  src:url({FONT_600}) format('woff2');}}
 *{{box-sizing:border-box;margin:0;padding:0}}
 body{{width:1200px;height:630px;display:flex;align-items:center;justify-content:center;
-  font-family:'Recursive',sans-serif;background:{ground};overflow:hidden}}
+  font-family:'Fira Sans',sans-serif;background:{ground};overflow:hidden}}
 .card{{display:flex;flex-direction:column;align-items:center}}
 .row{{display:flex;align-items:center;gap:30px}}
 svg{{width:150px;height:150px;fill:none;stroke:{ink};stroke-width:2.3;
   stroke-linecap:round;stroke-linejoin:round}}
-h1{{font-size:132px;font-weight:800;letter-spacing:-5px;color:{ink};
-  font-variation-settings:'CASL' 0.9,'MONO' 0;line-height:1}}
-p{{font-size:52px;font-weight:600;color:{accent};margin-top:34px;
-  font-variation-settings:'CASL' 0.6,'MONO' 0;letter-spacing:-.6px}}
+/* Weight and tracking copied from .lhero h1 on the landing page, so the card's
+   lettering and the site's hero are the same type at different sizes. */
+h1{{font-size:132px;font-weight:800;letter-spacing:-.035em;color:{ink};line-height:.98}}
+p{{font-size:52px;font-weight:600;color:{accent};margin-top:34px;letter-spacing:-.015em}}
 </style></head><body><div class="card"><div class="row">
 <svg viewBox="0 0 52 52">{BASKET}</svg><h1>Bringest</h1></div>
 <p>Bring things. Together.</p></div></body></html>
