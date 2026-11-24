@@ -371,10 +371,16 @@ tr:last-child td{border-bottom:0}
   <div class="foot">
     <a href="/terms">Terms of Service</a>
     <a href="/cookies">Cookie Statement</a>
-    <a href="mailto:support@dib.works">Contact</a>
+    <a href="#contact">Contact</a>
     <p class="maker">Bringest is a <b>DIB&nbsp;Works</b> product, operated by LVT8&nbsp;Technical&nbsp;LLC.<br>
       &copy; 2026</p>
   </div>
 </div>
+<script>
+document.querySelectorAll('a[href="#contact"]').forEach((a) => a.addEventListener("click", (e) => {
+  e.preventDefault();
+  location.href = "mailto:" + ["support", "dib.works"].join("@");
+}));
+</script>
 </body>
 </html>

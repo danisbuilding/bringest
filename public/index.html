@@ -1672,7 +1672,7 @@ function markFooter() {
       <a href="${BASE}/privacy">Privacy</a><span>&middot;</span>
       <a href="${BASE}/terms">Terms</a><span>&middot;</span>
       <a href="${BASE}/cookies">Cookies</a><span>&middot;</span>
-      <a href="mailto:support@dib.works">Contact</a>
+      <a href="#contact" class="mailme">Contact</a>
     </p>
     <p class="maker">Bringest is a <b>DIB&nbsp;Works</b> product, operated by LVT8&nbsp;Technical&nbsp;LLC.<br>
       &copy; ${new Date().getFullYear()}</p>
@@ -1693,6 +1693,14 @@ function render() {
   if (parts[0] === "h" && parts[1]) return renderDashboard(parts[1]);
   return renderLanding();
 }
+
+// The support address is assembled only when Contact is clicked, so it never
+// appears in the page source or the DOM for an address harvester to find.
+document.addEventListener("click", (e) => {
+  if (!e.target.closest("a.mailme")) return;
+  e.preventDefault();
+  location.href = "mailto:" + ["support", "dib.works"].join("@");
+});
 
 document.addEventListener("click", (e) => {
   const a = e.target.closest("a[href^='/']");

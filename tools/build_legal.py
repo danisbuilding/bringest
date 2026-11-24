@@ -209,11 +209,19 @@ tr:last-child td{{border-bottom:0}}
       &copy; {year}</p>
   </div>
 </div>
+<script>
+document.querySelectorAll('a[href="#contact"]').forEach((a) => a.addEventListener("click", (e) => {{
+  e.preventDefault();
+  location.href = "mailto:" + ["support", "dib.works"].join("@");
+}}));
+</script>
 </body>
 </html>
 """
 
-CONTACT = ("mailto:support@dib.works", "Contact")
+# The address is assembled by the script at the end of SHELL when Contact is
+# clicked, so it never sits in the footer markup for a harvester to find.
+CONTACT = ("#contact", "Contact")
 
 NAV = {
     "privacy.html": [("/terms", "Terms of Service"), ("/cookies", "Cookie Statement"), CONTACT],
